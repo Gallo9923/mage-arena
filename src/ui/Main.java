@@ -8,9 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 public class Main extends Application{
@@ -26,13 +28,14 @@ public class Main extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Parent root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
+	
+		Region root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
 		Scene scene = new Scene(root);
 		
 		Image image = new Image(new FileInputStream("sprites" + File.separator + "Arena.png"));
 		BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
 		
-		
+		root.setBackground(new Background(backgroundImage));
 		//myContainer.setBackground(new Background(myBF));
 		
 		primaryStage.setTitle("Mage Arena");
