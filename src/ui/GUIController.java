@@ -56,6 +56,8 @@ public class GUIController {
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
 		
+		Image arena = new Image(new FileInputStream("sprites/Arena.png"));
+		
 		//Initialize FXML
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
 		fxmlLoader2.setController(this);
@@ -89,12 +91,12 @@ public class GUIController {
 						//Initialize Canvas
 						double t = (System.currentTimeMillis() - timeStart) / 1000.0;
 						gc.clearRect(0, 0, 1280, 720);
-						Player match = gameManager.getMatch();
-						//gc.fillRect(0, 0, 500, 500);
 						
-						//Update
-						gameManager.update();
-						gc.drawImage(match.getSprite().getFrame(t), match.getPosX(), match.getPosY());
+						gc.drawImage(arena, 0, 0);
+						
+						//Game Logic
+						updateEntities();
+						renderEntities(gc, t);
 						
 					}
 				});
@@ -103,6 +105,16 @@ public class GUIController {
 		gameLoop.play();
 
 	
+	}
+	
+	
+	
+	public void updateEntities() {
+		gameManager.updateEntities();
+	}
+	
+	public void renderEntities(GraphicsContext gc, double t) {
+		gameManager.renderEntities(gc, t);
 	}
 	
 	private void initializeActionHandlers() {
