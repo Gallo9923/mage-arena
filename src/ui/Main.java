@@ -15,13 +15,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import model.GameManager;
 
 public class Main extends Application{
-
+	
+	private GameManager gameManager;
 	private GUIController controller;
 	
 	public Main() {
-		controller = new GUIController();
+		gameManager  = new GameManager();
+		controller = new GUIController(gameManager);
 	}
 	
 	public static void main(String[] args) {
