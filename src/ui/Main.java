@@ -13,11 +13,16 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Main extends Application{
 
+	private GUIController controller;
 	
+	public Main() {
+		controller = new GUIController();
+	}
 	
 	public static void main(String[] args) {
 		
@@ -28,16 +33,18 @@ public class Main extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-	
-		Region root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
-		Scene scene = new Scene(root);
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainPane.fxml"));
+		fxmlLoader.setController(controller);
+		BorderPane pane = fxmlLoader.load();
 		
-		Image image = new Image(new FileInputStream("sprites" + File.separator + "Arena.png"));
-		BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
+		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Login.fxml"));
+		fxmlLoader2.setController(controller);
+		StackPane stackPane = fxmlLoader2.load();
 		
-		root.setBackground(new Background(backgroundImage));
-		//myContainer.setBackground(new Background(myBF));
+		pane.setCenter(stackPane);
 		
+		Scene scene = new Scene(pane);
+
 		primaryStage.setTitle("Mage Arena");
 		primaryStage.setScene(scene);
 		primaryStage.show();
