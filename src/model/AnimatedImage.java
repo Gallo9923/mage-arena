@@ -13,4 +13,5 @@ public class AnimatedImage
         int index = (int)((time % (frames.length * duration)) / duration);
         return frames[index];
     }
+    
 }
