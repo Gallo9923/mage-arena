@@ -9,7 +9,6 @@ public abstract class Mob extends Entity{
 		super(sprite, posX, posY, width, height);
 		this.health = health;
 		this.damage = damage;
-		
 	}
 
 }

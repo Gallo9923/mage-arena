@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -14,7 +15,7 @@ public class Player extends Entity{
 	private double health;
 	private Movement movement;
 	
-	public Player(AnimatedImage sprite, double posX, double posY, Movement movement) {
+	public Player(AnimatedImage sprite, double posX, double posY, Movement movement) throws FileNotFoundException {
 		super(sprite, posX, posY, 100, 100);
 		health = 100;
 		
@@ -23,6 +24,10 @@ public class Player extends Entity{
 		
 		entities = new ArrayList<Entity>();
 		entities.add(this);
+		
+		SlimeFactory sf = new SlimeFactory();
+		entities.add(sf.createMob());
+		
 	}
 
 	public void updateEntities() {
@@ -30,9 +35,7 @@ public class Player extends Entity{
 		for(int i=0; i<entities.size(); i++) {
 			entities.get(i).update();
 		}
-		
-		
-		
+
 	}
 	
 	@Override

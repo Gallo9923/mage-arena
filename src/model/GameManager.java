@@ -9,10 +9,10 @@ import javafx.scene.input.KeyEvent;
 import model.AnimatedImage;
 
 public class GameManager {
-	
+
 	private final double MAGE_WIDTH = 150;
 	private final double MAGE_HEIGHT = 150;
-	
+
 	private Player match;
 
 	public GameManager() {
@@ -25,10 +25,6 @@ public class GameManager {
 
 	}
 
-	/*
-	 * public void update() { match.update(); }
-	 */
-	
 	public void updateEntities() {
 		match.updateEntities();
 	}
@@ -43,7 +39,8 @@ public class GameManager {
 
 		Image[] imageArray = new Image[2];
 		for (int i = 0; i < 2; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/OrangeMage" + i + ".png"), MAGE_WIDTH, MAGE_HEIGHT, false, false);
+			imageArray[i] = new Image(new FileInputStream("sprites/OrangeMage" + i + ".png"), MAGE_WIDTH, MAGE_HEIGHT,
+					false, false);
 			;
 		}
 		mage.frames = imageArray;

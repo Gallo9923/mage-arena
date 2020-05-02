@@ -64,11 +64,4 @@ public abstract class Entity {
 		return height;
 	}
 	
-	
-	
-	/*
-	public AnimatedImage getSprite() {
-		return sprite;
-	}
-	*/
 }
