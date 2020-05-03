@@ -108,7 +108,6 @@ public class GUIController {
 	}
 	
 	
-	
 	public void updateEntities() {
 		gameManager.updateEntities();
 	}

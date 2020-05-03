@@ -13,13 +13,11 @@ public class Player extends Entity{
 	
 	private ArrayList<Entity> entities;
 	private double health;
-	private Movement movement;
 	
 	public Player(AnimatedImage sprite, double posX, double posY, Movement movement) throws FileNotFoundException {
-		super(sprite, posX, posY, 100, 100);
+		super(sprite, posX, posY, 100, 100, movement);
 		health = 100;
 		
-		this.movement = movement;
 		currentlyActiveKeys = new HashSet();
 		
 		entities = new ArrayList<Entity>();
@@ -30,6 +28,7 @@ public class Player extends Entity{
 		
 	}
 
+	
 	public void updateEntities() {
 		
 		for(int i=0; i<entities.size(); i++) {
@@ -38,11 +37,6 @@ public class Player extends Entity{
 
 	}
 	
-	@Override
-	public void update() {
-		this.move();
-	}
-
 	public void renderEntities(GraphicsContext gc, double t) {
 		for(int i=0; i<entities.size(); i++) {
 			entities.get(i).render(gc, t);
@@ -58,9 +52,6 @@ public class Player extends Entity{
 		currentlyActiveKeys.remove(event.getCode().toString());
 	}
 	
-	public void move() {
-		movement.move(this);
-	}
 
 	public HashSet getCurrentlyActiveKeys() {
 		return currentlyActiveKeys;

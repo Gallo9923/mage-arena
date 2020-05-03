@@ -3,20 +3,22 @@ package model;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Entity {
+public abstract class Entity implements Update{
 	
 	private AnimatedImage sprite;
 	private double posX;
 	private double posY;
 	private double width;
 	private double height;
+	private Movement movement;
 	
-	public Entity(AnimatedImage sprite, double posX, double posY, double width, double height) {
+	public Entity(AnimatedImage sprite, double posX, double posY, double width, double height, Movement movement) {
 		this.sprite = sprite;
 		this.posX = posX;
 		this.posY = posY;
 		this.width = width;
 		this.height = height;
+		this.movement = movement;
 	}
 	
 	
@@ -31,10 +33,6 @@ public abstract class Entity {
 	public boolean intersects(Entity entity) {
 		
 		return entity.getBoundary().intersects(this.getBoundary());
-		
-	}
-	
-	public void update() {
 		
 	}
 	
@@ -62,6 +60,14 @@ public abstract class Entity {
 
 	public double getHeight() {
 		return height;
+	}
+	
+	public void update() {
+		this.move();
+	}
+	
+	public void move() {
+		movement.move(this);
 	}
 	
 }

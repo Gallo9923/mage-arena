@@ -16,7 +16,7 @@ public class GameManager {
 	private Player match;
 
 	public GameManager() {
-
+		this.match = null;
 	}
 
 	public void newMatch() throws FileNotFoundException {
@@ -49,16 +49,19 @@ public class GameManager {
 		return mage;
 
 	}
-
+	
+	//To Delete
 	public void keyPressedEvent(KeyEvent event) {
 		match.keyPressedEvent(event);
 
 	}
 
+	//To Delete
 	public void keyReleasedEvent(KeyEvent event) {
 		match.keyReleasedEvent(event);
 	}
 
+	//Is Needed?
 	public Player getMatch() {
 		return match;
 	}
