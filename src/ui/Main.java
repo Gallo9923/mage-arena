@@ -17,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.GameManager;
 
+
 public class Main extends Application{
 	
 	private GameManager gameManager;

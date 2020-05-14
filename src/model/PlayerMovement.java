@@ -15,7 +15,7 @@ public class PlayerMovement implements Movement{
 		double x = entity.getPosX();
 		double y = entity.getPosY();
 		HashSet currentlyActiveKeys = ((Player)entity).getCurrentlyActiveKeys();
-		
+		/*
 		if (currentlyActiveKeys.contains("A") && x-xChange+40 > 0) {
 			x -= xChange;
 			entity.setPosX(x);
@@ -32,8 +32,41 @@ public class PlayerMovement implements Movement{
 			y += yChange;
 			entity.setPosY(y);
 		}
+		*/
+		if (currentlyActiveKeys.contains("A") && entity.intersectsLeftWall() == false) {
+			x -= xChange;
+			entity.setPosX(x);
+		}
+		if (currentlyActiveKeys.contains("D") && entity.intersectsRightWall() == false) {
+			x += xChange;
+			entity.setPosX(x);
+		}
+		if (currentlyActiveKeys.contains("W") && entity.intersectsTopWall() == false) {
+			y -= yChange;
+			entity.setPosY(y);
+		}
+		if (currentlyActiveKeys.contains("S") && entity.intersectsBottomWall() == false) {
+			y += yChange;
+			entity.setPosY(y);
+		}
 		
-		System.out.println("X: " + x + " Y: " + y);
+		if(entity.intersectsLeftWall()) {
+			System.out.println("LEFT");
+		}
+		
+		if(entity.intersectsRightWall()) {
+			System.out.println("Right");
+		}
+		
+		if(entity.intersectsBottomWall()) {
+			System.out.println("Bot");
+		}
+		
+		if(entity.intersectsTopWall()) {
+			System.out.println("TOP");
+		}
+		
+		//System.out.println("X: " + x + " Y: " + y);
 		
 	}
 	

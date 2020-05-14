@@ -25,25 +25,42 @@ public class SlimeMovement implements Movement{
 		if (count == 0) {
 			xBool = r.nextBoolean();
 			yBool = r.nextBoolean();
-			System.out.println("\n \n \n \n");
-			System.out.println(xBool + " " + yBool );
-		}
+			//System.out.println("\n \n \n \n");
+			//System.out.println(xBool + " " + yBool );
+		}		
 		
-		System.out.println(count);
 		
-		if(xBool == true) {
-			entity.setPosX(x+SPEED);
+		if(entity.intersectsWall() == false) {
+			if(xBool == true) {
+				entity.setPosX(x+SPEED);
+			}else {
+				entity.setPosX(x-SPEED);
+			}
+			
+			if(yBool == true) {
+				entity.setPosY(y+SPEED);
+			}else {
+				entity.setPosY(y-SPEED);
+			}
+	
+			count++;
+			
 		}else {
-			entity.setPosX(x-SPEED);
+			
+			if(entity.intersectsBottomWall()) {
+				entity.setPosY(y-SPEED);
+			}else if(entity.intersectsTopWall()) {
+				entity.setPosY(y+SPEED);
+			}else if(entity.intersectsLeftWall()) {
+				entity.setPosX(x+SPEED);
+			}else {
+				entity.setPosX(x-SPEED);
+			}
+			
+			count = 0;
 		}
 		
-		if(yBool == true) {
-			entity.setPosY(y+SPEED);
-		}else {
-			entity.setPosY(y-SPEED);
-		}
 		
-		count++;
 		
 	}
 	

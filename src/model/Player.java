@@ -15,7 +15,7 @@ public class Player extends Entity{
 	private double health;
 	
 	public Player(AnimatedImage sprite, double posX, double posY, Movement movement) throws FileNotFoundException {
-		super(sprite, posX, posY, 100, 100, movement);
+		super(sprite, posX, posY, 45, 54, 50, 45, movement);
 		health = 100;
 		
 		currentlyActiveKeys = new HashSet();
