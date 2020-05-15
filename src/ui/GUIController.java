@@ -86,7 +86,11 @@ public class GUIController {
 						gc.drawImage(arena, 0, 0);
 
 						// Game Logic
-						updateEntities();
+						try {
+							updateEntities();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
 						renderEntities(gc, t);
 
 					}
@@ -104,7 +108,7 @@ public class GUIController {
 		
 	}
 	
-	public void updateEntities() {
+	public void updateEntities() throws FileNotFoundException {
 		gameManager.updateEntities();
 	}
 

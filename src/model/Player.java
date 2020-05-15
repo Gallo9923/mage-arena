@@ -29,29 +29,31 @@ public class Player extends Entity {
 		entities = new ArrayList<Entity>();
 		entities.add(this);
 
+		/*
 		SlimeFactory sf = new SlimeFactory();
 		entities.add(sf.createMob());
+		*/
 		
 	}
 	
-	public void updateEntities() {
+	public void updateEntities() throws FileNotFoundException {
 		
+		createEntitiesLoop();
 		attackLoop();
 		removeEntitiesLoop();
 		updateLoop();
 	
 	}
 	
-
-	
-	
-	public void loseHealth(double damage) {
-		health = health - damage;
+	private void createEntitiesLoop() throws FileNotFoundException {
+		
+		Mob mob = SlimeFactory.getInstance().createMob(this);
+		if(mob != null) {
+			entities.add(mob);
+		}
+		
+		
 	}
-	
-	
-	
-	
 
 	private void removeEntitiesLoop() {
 		
@@ -136,9 +138,17 @@ public class Player extends Entity {
 	public HashSet<String> getCurrentlyActiveKeys() {
 		return currentlyActiveKeys;
 	}
+	
+	public void loseHealth(double damage) {
+		health = health - damage;
+	}
 
 	public double getHealth() {
 		return health;
+	}
+
+	public ArrayList<Entity> getEntities() {
+		return entities;
 	}
 
 	

@@ -26,7 +26,7 @@ public class GameManager {
 
 	}
 
-	public void updateEntities() {
+	public void updateEntities() throws FileNotFoundException {
 		match.updateEntities();
 	}
 
