@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import model.AnimatedImage;
 
 public class GameManager {
@@ -21,7 +22,7 @@ public class GameManager {
 
 	public void newMatch() throws FileNotFoundException {
 
-		match = new Player(mageSprite(), 500, 500, new PlayerMovement());
+		match = new Player(mageSprite(), 500, 500, new PlayerMovement(), new FireballAttack());
 
 	}
 
@@ -48,6 +49,10 @@ public class GameManager {
 
 		return mage;
 
+	}
+	
+	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
+		match.mouseClickEvent(event);
 	}
 	
 	//To Delete

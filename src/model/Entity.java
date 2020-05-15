@@ -11,11 +11,12 @@ public abstract class Entity implements Update {
 	private double width;
 	private double height;
 	private Movement movement;
+	private Attack attack;
 
 	private double offsetX;
 	private double offsetY;
 	
-	public Entity(AnimatedImage sprite, double posX, double posY, double width, double height, double offsetX, double offsetY, Movement movement) {
+	public Entity(AnimatedImage sprite, double posX, double posY, double width, double height, double offsetX, double offsetY, Movement movement, Attack attack) {
 		this.sprite = sprite;
 		this.posX = posX;
 		this.posY = posY;
@@ -24,6 +25,7 @@ public abstract class Entity implements Update {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.movement = movement;
+		this.attack = attack;
 	}
 
 	public void render(GraphicsContext gc, double t) {
@@ -124,9 +126,35 @@ public abstract class Entity implements Update {
 	public void update() {
 		this.move();
 	}
-
+	
+	public void attack() {
+		attack.attack(this);
+	}
+	
 	public void move() {
 		movement.move(this);
 	}
 
+	public AnimatedImage getSprite() {
+		return sprite;
+	}
+
+	public Movement getMovement() {
+		return movement;
+	}
+
+	public Attack getAttack() {
+		return attack;
+	}
+
+	public double getOffsetX() {
+		return offsetX;
+	}
+
+	public double getOffsetY() {
+		return offsetY;
+	}
+
+	
+	
 }

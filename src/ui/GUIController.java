@@ -23,6 +23,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundRepeat;
@@ -138,6 +139,19 @@ public class GUIController {
 			
 		});
 		
+		arenaMainStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				try {
+					gameManager.mouseClickEvent(event);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
 		
 	}
 	
