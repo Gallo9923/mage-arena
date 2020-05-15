@@ -9,8 +9,8 @@ public class SlimeFactory implements EnemyFactory{
 
 	@Override
 	public Mob createMob() throws FileNotFoundException {
-		
-		 return new Slime(slimeSprite(), 500, 500, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		//return new Slime(slimeSprite(), 500, 500, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		 return new Slime(slimeSprite(), 400, 400, 60 ,50, 10, 15, 65, 20, new NoMovement(), new SlimeAttack());
 	}
 	
 	public AnimatedImage slimeSprite() throws FileNotFoundException {

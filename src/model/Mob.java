@@ -12,4 +12,16 @@ public abstract class Mob extends Entity {
 		this.damage = damage;
 	}
 
+	public double getHealth() {
+		return health;
+	}
+
+	public double getDamage() {
+		return damage;
+	}
+	
+	
+	public void loseHealth(double damage) {
+		health = health - damage;
+	}
 }

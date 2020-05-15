@@ -1,44 +1,32 @@
 package ui;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.AnimatedImage;
 import model.GameManager;
 import model.Player;
 
 public class GUIController {
-	
+
 	private GameManager gameManager;
-	
+
 	@FXML
 	private BorderPane mainPane;
 
@@ -50,76 +38,83 @@ public class GUIController {
 
 	@FXML
 	private StackPane arenaMainStackPane;
-	
+
+	@FXML
+	private ProgressBar playerHealth;
+
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
-	
+
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
-		
+
 		Image arena = new Image(new FileInputStream("sprites/Arena.png"));
-		
-		//Initialize FXML
+
+		// Initialize FXML
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
 
 		mainPane.setCenter(stackPane);
 
-		
-		//arenaMainStackPane.requestFocus();
+		// arenaMainStackPane.requestFocus();
 		initializeActionHandlers();
-		
-		//Initialize Game
-		
+
+		// Initialize Game
+
 		gameManager.newMatch();
-	
-		
-		//Initialize Graphics
+
+		// Initialize Graphics
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		
+
 		Timeline gameLoop = new Timeline();
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
 
 		final long timeStart = System.currentTimeMillis();
-		
-		//Game Loop
+
+		// Game Loop
 		KeyFrame kf = new KeyFrame(Duration.seconds(0.017), // 60 FPS
 				new EventHandler<ActionEvent>() {
-			
+
 					public void handle(ActionEvent ae) {
 
-						//Initialize Canvas
+						// Initialize Canvas
 						double t = (System.currentTimeMillis() - timeStart) / 1000.0;
 						gc.clearRect(0, 0, 1280, 720);
-						
+
 						gc.drawImage(arena, 0, 0);
-						
-						//Game Logic
+
+						// Game Logic
 						updateEntities();
 						renderEntities(gc, t);
-						
+
 					}
 				});
 
 		gameLoop.getKeyFrames().add(kf);
 		gameLoop.play();
 
-	
 	}
+
+	public void updatePlayerHealthBar() {
 	
+		double health = gameManager.getMatch().getHealth();
+		playerHealth.setProgress(health/Player.MAX_HEALTH);
+		
+	}
 	
 	public void updateEntities() {
 		gameManager.updateEntities();
 	}
-	
+
 	public void renderEntities(GraphicsContext gc, double t) {
+		updatePlayerHealthBar();
 		gameManager.renderEntities(gc, t);
 	}
-	
+
 	private void initializeActionHandlers() {
-	
+
 		arenaMainStackPane.requestFocus();
 		arenaMainStackPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -129,16 +124,16 @@ public class GUIController {
 			}
 
 		});
-		
-		arenaMainStackPane.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+		arenaMainStackPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
 				gameManager.keyReleasedEvent(event);
 			}
-			
+
 		});
-		
+
 		arenaMainStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -148,13 +143,13 @@ public class GUIController {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		setSceneMenu(event);
@@ -203,8 +198,6 @@ public class GUIController {
 
 		mainPane.setCenter(stackPane);
 	}
-
-	
 
 	@FXML
 	private void setSceneScoreboard(ActionEvent event) throws IOException {

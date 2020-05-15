@@ -1,11 +1,9 @@
 package model;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import javafx.scene.image.Image;
 
 public class FireballAttack implements Attack{
+	
+	private long lastTime = 0;
 	
 	public FireballAttack()  {
 		
@@ -16,10 +14,23 @@ public class FireballAttack implements Attack{
 	
 	@Override
 	public void attack(Entity entity) {
-		// TODO Auto-generated method stub
+		
+		long currTime = System.currentTimeMillis();
+		
+		if(currTime-lastTime >= 10) {
+			performAttack(entity);
+			lastTime = currTime;
+		}
 		
 	}
 	
+	
+	public void performAttack(Entity entity) {
+		Mob mob = (Mob)entity;
+		mob.loseHealth(100);
+		
+		System.out.println("HIYYYY");
+	}
 	
 
 }

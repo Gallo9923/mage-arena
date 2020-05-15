@@ -127,8 +127,8 @@ public abstract class Entity implements Update {
 		this.move();
 	}
 	
-	public void attack() {
-		attack.attack(this);
+	public void attack(Entity entity) {
+		attack.attack(entity);
 	}
 	
 	public void move() {
