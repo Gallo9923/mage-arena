@@ -128,10 +128,16 @@ public class GUIController {
 
 	public void renderEntities(GraphicsContext gc, double t) {
 		updatePlayerHealthBar();
+		updatePlayerArmorBar();
 		updateScore();
 		gameManager.renderEntities(gc, t);
 	}
 
+	public void updatePlayerArmorBar() {
+		double armor = gameManager.getMatch().getArmor();
+		playerArmor.setProgress(armor/Player.MAX_ARMOR);
+	}
+	
 	private void initializeActionHandlers() {
 
 		arenaMainStackPane.requestFocus();
