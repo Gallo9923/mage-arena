@@ -55,6 +55,10 @@ public class GameManager {
 		match.mouseClickEvent(event);
 	}
 	
+	public double getScore() {
+		return match.getScore();
+	}
+	
 	//To Delete
 	public void keyPressedEvent(KeyEvent event) {
 		match.keyPressedEvent(event);

@@ -28,6 +28,14 @@
             <Insets />
          </opaqueInsets>
       </ProgressBar>
+      <Label fx:id="score" alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="232.0" text="100" textAlignment="CENTER" StackPane.alignment="TOP_RIGHT">
+         <StackPane.margin>
+            <Insets right="60.0" top="125.0" />
+         </StackPane.margin>
+         <font>
+            <Font name="System Bold" size="48.0" />
+         </font>
+      </Label>
       <StackPane fx:id="pauseMenu" prefHeight="150.0" prefWidth="200.0">
          <children>
             <ImageView fitHeight="601.0" fitWidth="546.0" pickOnBounds="true" preserveRatio="true" />

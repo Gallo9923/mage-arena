@@ -3,6 +3,7 @@ package model;
 public class SlimeAttack implements Attack{
 	
 	private long lastTime = 0;
+	private double damage = 15;
 	
 	@Override
 	public void attack(Entity entity) {
@@ -18,7 +19,13 @@ public class SlimeAttack implements Attack{
 	
 	public void performAttack(Entity entity) {
 		Player player = (Player)entity;
-		player.loseHealth(15);
+		
+		player.loseScore(this);
+		player.loseHealth(damage);
 	}
 
+	public double getDamage() {
+		return damage;
+	}
+	
 }

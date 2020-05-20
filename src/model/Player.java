@@ -19,6 +19,9 @@ public class Player extends Entity {
 	private double clickX;
 	private double clickY;
 
+	private double score;
+	private double armor;
+	
 	public Player(AnimatedImage sprite, double posX, double posY, Movement movement, Attack attack)
 			throws FileNotFoundException {
 		super(sprite, posX, posY, 45, 54, 50, 45, movement, attack);
@@ -29,11 +32,8 @@ public class Player extends Entity {
 		entities = new ArrayList<Entity>();
 		entities.add(this);
 
-		/*
-		SlimeFactory sf = new SlimeFactory();
-		entities.add(sf.createMob());
-		*/
-		
+		score = 0;
+		armor = 0;
 	}
 	
 	public void updateEntities() throws FileNotFoundException {
@@ -52,6 +52,10 @@ public class Player extends Entity {
 			entities.add(mob);
 		}
 		
+		Item item = PerksFactory.getInstance().createItem(this);
+		if(item != null) {
+			entities.add(item);
+		}
 		
 	}
 
@@ -101,12 +105,31 @@ public class Player extends Entity {
 					
 					if (i != j && aux instanceof Mob && curr.intersects(aux)) {
 						
+						gainScore(curr);
 						curr.attack(aux);
+						entities.remove(curr);
+						i--;
 					}
 				}
 			} // else if(curr instanceof Item)
 
 		}
+	}
+	
+	public void loseScore(Attack attack) {
+		
+		score -= attack.getDamage();
+		
+		if(score < 0) {
+			score = 0;
+		}
+	
+	}
+	
+	public void gainScore(Entity entity) {
+		Attack attack = entity.getAttack();
+		score += attack.getDamage();
+		
 	}
 
 	public void renderEntities(GraphicsContext gc, double t) {
@@ -151,6 +174,11 @@ public class Player extends Entity {
 		return entities;
 	}
 
+	public double getScore() {
+		return score;
+	}
 	
-	
+	public double getArmor() {
+		return armor;
+	}
 }

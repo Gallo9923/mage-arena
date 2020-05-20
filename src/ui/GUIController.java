@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -34,14 +35,18 @@ public class GUIController {
 	private Canvas canvas;
 
 	@FXML
-	StackPane pauseMenu;
+	private StackPane pauseMenu;
 
 	@FXML
 	private StackPane arenaMainStackPane;
 
 	@FXML
 	private ProgressBar playerHealth;
+	
+	@FXML 
+	private Label score;
 
+	
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
@@ -86,6 +91,7 @@ public class GUIController {
 						gc.drawImage(arena, 0, 0);
 
 						// Game Logic
+						
 						try {
 							updateEntities();
 						} catch (FileNotFoundException e) {
@@ -108,12 +114,18 @@ public class GUIController {
 		
 	}
 	
+	public void updateScore() {
+		double scoreValue = gameManager.getScore();
+		score.setText(scoreValue + "");
+	}
+	
 	public void updateEntities() throws FileNotFoundException {
 		gameManager.updateEntities();
 	}
 
 	public void renderEntities(GraphicsContext gc, double t) {
 		updatePlayerHealthBar();
+		updateScore();
 		gameManager.renderEntities(gc, t);
 	}
 

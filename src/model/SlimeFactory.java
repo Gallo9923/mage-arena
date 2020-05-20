@@ -12,6 +12,7 @@ public class SlimeFactory implements MobFactory{
 	private static SlimeFactory factory;
 	private int mobs;
 	
+	
 	private SlimeFactory() {
 		mobs = 0;
 	}
