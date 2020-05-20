@@ -49,6 +49,8 @@ public class GUIController {
 	@FXML 
 	private Label score;
 
+	@FXML 
+	private Label chronometer;
 	
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
@@ -109,6 +111,21 @@ public class GUIController {
 		gameLoop.play();
 
 	}
+	
+	public void updateChronometer() {
+		
+		long duration = gameManager.getMatch().getChronometer();
+		
+		long milliseconds = duration % 1000;
+		long seconds = (duration / 1000) % 60;
+		long minutes = (duration / 60000) % 60;
+		String sMil = milliseconds < 10 ? ("00" + milliseconds)
+				: milliseconds < 100 ? ("0" + milliseconds) : ("" + milliseconds);
+		String sSec = seconds < 10 ? ("0" + seconds) : ("" + seconds);
+		String sMin = minutes < 10 ? ("0" + minutes) : ("" + minutes);
+		
+		chronometer.setText(sMin + ":" + sSec);
+	}
 
 	public void updatePlayerHealthBar() {
 	
@@ -127,6 +144,7 @@ public class GUIController {
 	}
 
 	public void renderEntities(GraphicsContext gc, double t) {
+		updateChronometer();
 		updatePlayerHealthBar();
 		updatePlayerArmorBar();
 		updateScore();
@@ -155,6 +173,8 @@ public class GUIController {
 			@Override
 			public void handle(KeyEvent event) {
 				gameManager.keyReleasedEvent(event);
+				keyPressed(event);
+				
 			}
 
 		});
@@ -188,16 +208,14 @@ public class GUIController {
 		arenaMainStackPane.requestFocus();
 	}
 
-	@FXML
 	void keyPressed(KeyEvent event) {
 
 		if (event.getCode().toString().equals("ESCAPE") && pauseMenu.isVisible()) {
 			pauseMenu.setVisible(false);
-		} else {
+		} else if (event.getCode().toString().equals("ESCAPE") && !pauseMenu.isVisible()){
 			pauseMenu.setVisible(true);
 		}
 
-		arenaMainStackPane.requestFocus();
 	}
 
 	@FXML

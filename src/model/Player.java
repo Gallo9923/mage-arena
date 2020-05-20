@@ -23,6 +23,13 @@ public class Player extends Entity {
 	private double score;
 	private double armor;
 	
+	private boolean paused;
+	private long chronometer;
+	private long pauseDuration;
+	private long t1;
+	private long pauseTime1;
+	private long pauseTime2;
+	
 	public Player(AnimatedImage sprite, double posX, double posY, Movement movement, Attack attack)
 			throws FileNotFoundException {
 		super(sprite, posX, posY, 45, 54, 50, 45, movement, attack);
@@ -35,15 +42,39 @@ public class Player extends Entity {
 
 		score = 0;
 		armor = 0;
+		paused = false;
+		pauseDuration = 0;
+		unPause();
+		
+	}
+	
+	public void unPause() {
+		pauseTime2 = System.currentTimeMillis();
+		pauseDuration += pauseTime2 - pauseTime1;
+		paused = false;
+	}
+	
+	public void pause() {
+		pauseTime1 = System.currentTimeMillis();
+		paused = true;
 	}
 	
 	public void updateEntities() throws FileNotFoundException {
 		
-		createEntitiesLoop();
-		attackLoop();
-		removeEntitiesLoop();
-		updateLoop();
+		if(paused == false) {
+			updateChronometer();
+			createEntitiesLoop();
+			attackLoop();
+			removeEntitiesLoop();
+			updateLoop();
+		}
+		
+		
 	
+	}
+	
+	private void updateChronometer() {
+		chronometer = System.currentTimeMillis() - t1 - pauseDuration;
 	}
 	
 	private void createEntitiesLoop() throws FileNotFoundException {
@@ -158,7 +189,13 @@ public class Player extends Entity {
 	
 	public void keyPressedEvent(KeyEvent event) {
 		currentlyActiveKeys.add(event.getCode().toString());
-		//System.out.println(currentlyActiveKeys.toString());
+		
+		if(event.getCode().toString().equals("ESCAPE") && paused == false) {
+			pause();
+		}else if(event.getCode().toString().equals("ESCAPE") && paused == true){
+			unPause();
+		}
+		
 	}
 
 	public void keyReleasedEvent(KeyEvent event) {
@@ -216,5 +253,9 @@ public class Player extends Entity {
 	
 	public double getArmor() {
 		return armor;
+	}
+	
+	public long getChronometer() {
+		return chronometer;
 	}
 }
