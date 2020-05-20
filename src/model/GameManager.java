@@ -51,6 +51,10 @@ public class GameManager {
 
 	}
 	
+	public void unPauseGame() {
+		match.unPause();
+	}
+	
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
 		match.mouseClickEvent(event);
 	}

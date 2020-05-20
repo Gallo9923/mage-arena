@@ -55,7 +55,8 @@ public class GUIController {
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
-
+	
+	
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
 
@@ -65,7 +66,8 @@ public class GUIController {
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
-
+		
+		pauseMenu.setVisible(false);
 		mainPane.setCenter(stackPane);
 
 		// arenaMainStackPane.requestFocus();
@@ -204,7 +206,8 @@ public class GUIController {
 	@FXML
 	void resumeGame(ActionEvent event) {
 		pauseMenu.setVisible(false);
-
+		gameManager.unPauseGame();
+		
 		arenaMainStackPane.requestFocus();
 	}
 
