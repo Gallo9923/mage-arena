@@ -23,22 +23,28 @@ public class PerksFactory implements ItemsFactory {
 
 		Item item = null;
 		countItems(player.getEntities());
-
+		Random r = new Random();
+		
 		if (player.getHealth() <= Player.MAX_HEALTH / 2 && health < 1) {
 
-			Random r = new Random();
+			
 			double x = r.nextInt(1180) + 50;
 			double y = r.nextInt(620) + 50;
 
-			item = new Health(healthSprite(), x, y, 100, 100, 0, 0, new NoMovement(), new ActivatePerkAttack());
+			item = new Health(healthSprite(), x, y, 40, 40, 25, 20, new NoMovement(), new HealthPerkAttack());
 
 		} else if (player.getHealth() == 100 && player.getArmor() < 100 && armor < 1) {
 
-			Random r = new Random();
 			double x = r.nextInt(1180) + 50;
 			double y = r.nextInt(620) + 50;
 
-			item = new Armor(armorSprite(), x, y, 100, 100, 0, 0, new NoMovement(), new ActivatePerkAttack());
+			item = new Armor(armorSprite(), x, y, 40, 50, 15, 10, new NoMovement(), new ArmorPerkAttack());
+		}else if(player.getHealth() < 100 && health < 1 && r.nextDouble() > 0.999) {
+			
+			double x = r.nextInt(1180) + 50;
+			double y = r.nextInt(620) + 50;
+
+			item = new Health(healthSprite(), x, y, 40, 40, 25, 20, new NoMovement(), new HealthPerkAttack());
 		}
 
 		return item;
@@ -69,7 +75,7 @@ public class PerksFactory implements ItemsFactory {
 
 		Image[] imageArray = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/BluePotion" + i + ".png"), 60, 60, false, false);
+			imageArray[i] = new Image(new FileInputStream("sprites/BluePotion" + i + ".png"), 70, 70, false, false);
 		}
 		armor.frames = imageArray;
 		armor.duration = 0.125;
@@ -84,7 +90,7 @@ public class PerksFactory implements ItemsFactory {
 
 		Image[] imageArray = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/Heart" + i + ".png"), 60, 60, false, false);
+			imageArray[i] = new Image(new FileInputStream("sprites/Heart" + i + ".png"), 90, 90, false, false);
 		}
 		health.frames = imageArray;
 		health.duration = 0.125;

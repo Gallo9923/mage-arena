@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 public class Player extends Entity {
 
 	public static final double MAX_HEALTH = 100;
+	public static final double MAX_ARMOR = 100;
 	
 	private HashSet<String> currentlyActiveKeys;
 
@@ -111,7 +112,13 @@ public class Player extends Entity {
 						i--;
 					}
 				}
-			} // else if(curr instanceof Item)
+			} else if(curr instanceof Item && curr.intersects(this)) {
+				curr.attack(this);
+				entities.remove(curr);
+				i--;
+			}
+			
+		
 
 		}
 	}
@@ -164,6 +171,23 @@ public class Player extends Entity {
 	
 	public void loseHealth(double damage) {
 		health = health - damage;
+	}
+	
+	public void gainHealth(double healthGained) {
+		health += healthGained;
+		
+		if(health > MAX_HEALTH) {
+			health = MAX_HEALTH;
+		}
+		
+	}
+	
+	public void gainArmor(double armorGained) {
+		this.armor += armorGained;
+		
+		if(armor > MAX_ARMOR) {
+			armor = MAX_ARMOR;
+		}
 	}
 
 	public double getHealth() {

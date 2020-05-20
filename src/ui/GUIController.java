@@ -43,6 +43,9 @@ public class GUIController {
 	@FXML
 	private ProgressBar playerHealth;
 	
+	@FXML
+	private ProgressBar playerArmor;
+	
 	@FXML 
 	private Label score;
 
