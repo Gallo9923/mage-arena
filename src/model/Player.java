@@ -170,7 +170,19 @@ public class Player extends Entity {
 	}
 	
 	public void loseHealth(double damage) {
-		health = health - damage;
+		
+		if(armor > 0 && damage > armor) {
+			armor = 0;
+			health -= damage - armor;
+			
+		}else if(armor > 0) {
+			armor -= damage;
+		}else {
+			
+			health -= damage;
+			
+		}
+	
 	}
 	
 	public void gainHealth(double healthGained) {
