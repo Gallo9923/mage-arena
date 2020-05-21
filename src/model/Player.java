@@ -23,6 +23,8 @@ public class Player extends Entity {
 	private double score;
 	private double armor;
 	
+	private boolean won;
+	private boolean lose;
 	private boolean paused;
 	private long chronometer;
 	private long pauseDuration;
@@ -43,6 +45,8 @@ public class Player extends Entity {
 		score = 0;
 		armor = 0;
 		paused = false;
+		lose = false;
+		won = false;
 		pauseDuration = 0;
 		unPause();
 		
@@ -61,7 +65,7 @@ public class Player extends Entity {
 	
 	public void updateEntities() throws FileNotFoundException {
 		
-		if(paused == false) {
+		if(paused == false && lose == false) {
 			updateChronometer();
 			createEntitiesLoop();
 			attackLoop();
@@ -99,6 +103,7 @@ public class Player extends Entity {
 			
 			if(entity instanceof Player && ((Player) entity).getHealth() <= 0) {
 				
+				lose = true;
 				entities.remove(i);
 				i = i-1;
 				
@@ -177,13 +182,19 @@ public class Player extends Entity {
 	}
 
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
-		clickX = event.getSceneX();
-		clickY = event.getSceneY();
+		
+		if(paused == false && lose == false) {
+			
+			clickX = event.getSceneX();
+			clickY = event.getSceneY();
 
-		//System.out.println("click X: " + clickX + " " + clickY);
+			//System.out.println("click X: " + clickX + " " + clickY);
 
-		Fireball fb = (Fireball) FireballFactory.getInstance().createSpell(this, clickX, clickY);
-		entities.add(fb);
+			Fireball fb = (Fireball) FireballFactory.getInstance().createSpell(this, clickX, clickY);
+			entities.add(fb);
+		}
+		
+		
 
 	}
 	
@@ -258,4 +269,18 @@ public class Player extends Entity {
 	public long getChronometer() {
 		return chronometer;
 	}
+
+	public boolean isWon() {
+		return won;
+	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	public boolean isLose() {
+		return lose;
+	}
+	
+	
 }

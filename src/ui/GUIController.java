@@ -38,27 +38,35 @@ public class GUIController {
 	private StackPane pauseMenu;
 
 	@FXML
+	private StackPane lostMenu;
+
+	@FXML
 	private StackPane arenaMainStackPane;
 
 	@FXML
 	private ProgressBar playerHealth;
-	
+
 	@FXML
 	private ProgressBar playerArmor;
-	
-	@FXML 
+
+	@FXML
 	private Label score;
 
-	@FXML 
+	@FXML
 	private Label chronometer;
-	
+
 	private Timeline gameLoop;
+
+	@FXML
+    private Label losePoints;
+
+    @FXML
+    private Label loseTime;
 	
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
-	
-	
+
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
 
@@ -68,9 +76,11 @@ public class GUIController {
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
-		
+
+		lostMenu.setVisible(false);
 		pauseMenu.setVisible(false);
 		mainPane.setCenter(stackPane);
+		playerHealth.setStyle("-fx-accent: red");
 
 		// arenaMainStackPane.requestFocus();
 		initializeActionHandlers();
@@ -100,13 +110,15 @@ public class GUIController {
 						gc.drawImage(arena, 0, 0);
 
 						// Game Logic
-						
+
 						try {
 							updateEntities();
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
 						renderEntities(gc, t);
+
+						matchEndedCheckLoop();
 
 					}
 				});
@@ -115,34 +127,53 @@ public class GUIController {
 		gameLoop.play();
 
 	}
-	
+
+	public void matchEndedCheckLoop() {
+
+		if (gameManager.isLose()) {
+			setSceneLose();
+		} else if (gameManager.isWon()) {
+			setSceneWon();
+		}
+
+	}
+
+	public void setSceneLose() {
+		
+		lostMenu.setVisible(true);
+		losePoints.setText(score.getText());
+		loseTime.setText(chronometer.getText());
+		
+	}
+
+	public void setSceneWon() {
+
+	}
+
 	public void updateChronometer() {
-		
+
 		long duration = gameManager.getMatch().getChronometer();
-		
-		long milliseconds = duration % 1000;
+
 		long seconds = (duration / 1000) % 60;
 		long minutes = (duration / 60000) % 60;
-		String sMil = milliseconds < 10 ? ("00" + milliseconds)
-				: milliseconds < 100 ? ("0" + milliseconds) : ("" + milliseconds);
 		String sSec = seconds < 10 ? ("0" + seconds) : ("" + seconds);
 		String sMin = minutes < 10 ? ("0" + minutes) : ("" + minutes);
-		
+
 		chronometer.setText(sMin + ":" + sSec);
 	}
 
 	public void updatePlayerHealthBar() {
-	
+
 		double health = gameManager.getMatch().getHealth();
-		playerHealth.setProgress(health/Player.MAX_HEALTH);
-		
+		playerHealth.setProgress(health / Player.MAX_HEALTH);
+
 	}
-	
+
 	public void updateScore() {
 		double scoreValue = gameManager.getScore();
 		score.setText(scoreValue + "");
 	}
-	
+
 	public void updateEntities() throws FileNotFoundException {
 		gameManager.updateEntities();
 	}
@@ -157,9 +188,9 @@ public class GUIController {
 
 	public void updatePlayerArmorBar() {
 		double armor = gameManager.getMatch().getArmor();
-		playerArmor.setProgress(armor/Player.MAX_ARMOR);
+		playerArmor.setProgress(armor / Player.MAX_ARMOR);
 	}
-	
+
 	private void initializeActionHandlers() {
 
 		arenaMainStackPane.requestFocus();
@@ -178,7 +209,7 @@ public class GUIController {
 			public void handle(KeyEvent event) {
 				gameManager.keyReleasedEvent(event);
 				keyPressed(event);
-				
+
 			}
 
 		});
@@ -202,14 +233,14 @@ public class GUIController {
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		setSceneMenu(event);
-		
+
 	}
 
 	@FXML
 	void resumeGame(ActionEvent event) {
 		pauseMenu.setVisible(false);
 		gameManager.unPauseGame();
-		
+
 		arenaMainStackPane.requestFocus();
 	}
 
@@ -217,7 +248,7 @@ public class GUIController {
 
 		if (event.getCode().toString().equals("ESCAPE") && pauseMenu.isVisible()) {
 			pauseMenu.setVisible(false);
-		} else if (event.getCode().toString().equals("ESCAPE") && !pauseMenu.isVisible()){
+		} else if (event.getCode().toString().equals("ESCAPE") && !pauseMenu.isVisible()) {
 			pauseMenu.setVisible(true);
 		}
 
@@ -261,13 +292,13 @@ public class GUIController {
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Menu.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
-		
+
 		mainPane.setCenter(stackPane);
-		
-		if(gameLoop != null) {
+
+		if (gameLoop != null) {
 			gameLoop.stop();
 		}
-		
+
 	}
 
 }

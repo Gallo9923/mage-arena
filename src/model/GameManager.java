@@ -78,5 +78,17 @@ public class GameManager {
 	public Player getMatch() {
 		return match;
 	}
+	
+	public boolean isWon() {
+		return match.isWon();
+	}
+
+	public boolean isPaused() {
+		return match.isPaused();
+	}
+
+	public boolean isLose() {
+		return match.isLose();
+	}
 
 }
