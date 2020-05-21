@@ -1,43 +1,33 @@
 package ui;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.AnimatedImage;
 import model.GameManager;
 import model.Player;
 
 public class GUIController {
-	
+
 	private GameManager gameManager;
-	
+
 	@FXML
 	private BorderPane mainPane;
 
@@ -45,80 +35,164 @@ public class GUIController {
 	private Canvas canvas;
 
 	@FXML
-	StackPane pauseMenu;
+	private StackPane pauseMenu;
+
+	@FXML
+	private StackPane lostMenu;
 
 	@FXML
 	private StackPane arenaMainStackPane;
+
+	@FXML
+	private ProgressBar playerHealth;
+
+	@FXML
+	private ProgressBar playerArmor;
+
+	@FXML
+	private Label score;
+
+	@FXML
+	private Label chronometer;
+
+	private Timeline gameLoop;
+
+	@FXML
+    private Label losePoints;
+
+    @FXML
+    private Label loseTime;
 	
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
-	
+
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
-		
+
 		Image arena = new Image(new FileInputStream("sprites/Arena.png"));
-		
-		//Initialize FXML
+
+		// Initialize FXML
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
 
+		lostMenu.setVisible(false);
+		pauseMenu.setVisible(false);
 		mainPane.setCenter(stackPane);
+		playerHealth.setStyle("-fx-accent: red");
 
-		
-		//arenaMainStackPane.requestFocus();
+		// arenaMainStackPane.requestFocus();
 		initializeActionHandlers();
-		
-		//Initialize Game
-		
+
+		// Initialize Game
+
 		gameManager.newMatch();
-	
-		
-		//Initialize Graphics
+
+		// Initialize Graphics
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		
-		Timeline gameLoop = new Timeline();
+
+		gameLoop = new Timeline();
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
 
 		final long timeStart = System.currentTimeMillis();
-		
-		//Game Loop
+
+		// Game Loop
 		KeyFrame kf = new KeyFrame(Duration.seconds(0.017), // 60 FPS
 				new EventHandler<ActionEvent>() {
-			
+
 					public void handle(ActionEvent ae) {
 
-						//Initialize Canvas
+						// Initialize Canvas
 						double t = (System.currentTimeMillis() - timeStart) / 1000.0;
 						gc.clearRect(0, 0, 1280, 720);
-						
+
 						gc.drawImage(arena, 0, 0);
-						
-						//Game Logic
-						updateEntities();
+
+						// Game Logic
+
+						try {
+							updateEntities();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
 						renderEntities(gc, t);
-						
+
+						matchEndedCheckLoop();
+
 					}
 				});
 
 		gameLoop.getKeyFrames().add(kf);
 		gameLoop.play();
 
-	
 	}
-	
-	
-	public void updateEntities() {
+
+	public void matchEndedCheckLoop() {
+
+		if (gameManager.isLose()) {
+			setSceneLose();
+		} else if (gameManager.isWon()) {
+			setSceneWon();
+		}
+
+	}
+
+	public void setSceneLose() {
+		
+		lostMenu.setVisible(true);
+		losePoints.setText(score.getText());
+		loseTime.setText(chronometer.getText());
+		
+	}
+
+	public void setSceneWon() {
+
+	}
+
+	public void updateChronometer() {
+
+		long duration = gameManager.getMatch().getChronometer();
+
+		long seconds = (duration / 1000) % 60;
+		long minutes = (duration / 60000) % 60;
+		String sSec = seconds < 10 ? ("0" + seconds) : ("" + seconds);
+		String sMin = minutes < 10 ? ("0" + minutes) : ("" + minutes);
+
+		chronometer.setText(sMin + ":" + sSec);
+	}
+
+	public void updatePlayerHealthBar() {
+
+		double health = gameManager.getMatch().getHealth();
+		playerHealth.setProgress(health / Player.MAX_HEALTH);
+
+	}
+
+	public void updateScore() {
+		double scoreValue = gameManager.getScore();
+		score.setText(scoreValue + "");
+	}
+
+	public void updateEntities() throws FileNotFoundException {
 		gameManager.updateEntities();
 	}
-	
+
 	public void renderEntities(GraphicsContext gc, double t) {
+		updateChronometer();
+		updatePlayerHealthBar();
+		updatePlayerArmorBar();
+		updateScore();
 		gameManager.renderEntities(gc, t);
 	}
-	
+
+	public void updatePlayerArmorBar() {
+		double armor = gameManager.getMatch().getArmor();
+		playerArmor.setProgress(armor / Player.MAX_ARMOR);
+	}
+
 	private void initializeActionHandlers() {
-	
+
 		arenaMainStackPane.requestFocus();
 		arenaMainStackPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -128,19 +202,34 @@ public class GUIController {
 			}
 
 		});
-		
-		arenaMainStackPane.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+		arenaMainStackPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
 				gameManager.keyReleasedEvent(event);
+				keyPressed(event);
+
 			}
-			
+
 		});
-		
-		
+
+		arenaMainStackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				try {
+					gameManager.mouseClickEvent(event);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+
+			}
+
+		});
+
 	}
-	
+
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		setSceneMenu(event);
@@ -150,20 +239,19 @@ public class GUIController {
 	@FXML
 	void resumeGame(ActionEvent event) {
 		pauseMenu.setVisible(false);
+		gameManager.unPauseGame();
 
 		arenaMainStackPane.requestFocus();
 	}
 
-	@FXML
 	void keyPressed(KeyEvent event) {
 
 		if (event.getCode().toString().equals("ESCAPE") && pauseMenu.isVisible()) {
 			pauseMenu.setVisible(false);
-		} else {
+		} else if (event.getCode().toString().equals("ESCAPE") && !pauseMenu.isVisible()) {
 			pauseMenu.setVisible(true);
 		}
 
-		arenaMainStackPane.requestFocus();
 	}
 
 	@FXML
@@ -190,8 +278,6 @@ public class GUIController {
 		mainPane.setCenter(stackPane);
 	}
 
-	
-
 	@FXML
 	private void setSceneScoreboard(ActionEvent event) throws IOException {
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Scoreboard.fxml"));
@@ -208,6 +294,11 @@ public class GUIController {
 		StackPane stackPane = fxmlLoader2.load();
 
 		mainPane.setCenter(stackPane);
+
+		if (gameLoop != null) {
+			gameLoop.stop();
+		}
+
 	}
 
 }
