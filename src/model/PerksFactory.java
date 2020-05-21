@@ -33,7 +33,7 @@ public class PerksFactory implements ItemsFactory {
 
 			item = new Health(healthSprite(), x, y, 40, 40, 25, 20, new NoMovement(), new HealthPerkAttack());
 
-		} else if (player.getHealth() == 100 && player.getArmor() < 100 && armor < 1) {
+		} else if (player.getHealth() == 100 && player.getArmor() < 100 && armor < 1 && r.nextDouble() > 0.999) {
 
 			double x = r.nextInt(1180) + 50;
 			double y = r.nextInt(620) + 50;

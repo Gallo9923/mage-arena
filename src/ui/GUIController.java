@@ -52,6 +52,8 @@ public class GUIController {
 	@FXML 
 	private Label chronometer;
 	
+	private Timeline gameLoop;
+	
 	public GUIController(GameManager gm) {
 		this.gameManager = gm;
 	}
@@ -80,7 +82,7 @@ public class GUIController {
 		// Initialize Graphics
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		Timeline gameLoop = new Timeline();
+		gameLoop = new Timeline();
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
 
 		final long timeStart = System.currentTimeMillis();
@@ -200,7 +202,7 @@ public class GUIController {
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		setSceneMenu(event);
-
+		
 	}
 
 	@FXML
@@ -259,8 +261,13 @@ public class GUIController {
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Menu.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
-
+		
 		mainPane.setCenter(stackPane);
+		
+		if(gameLoop != null) {
+			gameLoop.stop();
+		}
+		
 	}
 
 }
