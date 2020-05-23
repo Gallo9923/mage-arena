@@ -1,11 +1,9 @@
 package model;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.scene.image.Image;
 
 public class PerksFactory implements ItemsFactory {
 
@@ -71,30 +69,26 @@ public class PerksFactory implements ItemsFactory {
 
 	public AnimatedImage armorSprite() throws FileNotFoundException {
 
-		AnimatedImage armor = new AnimatedImage();
-
-		Image[] imageArray = new Image[4];
+		String[] imageArray = new String[4];
 		for (int i = 0; i < 4; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/BluePotion" + i + ".png"), 70, 70, false, false);
+			imageArray[i] = "sprites/BluePotion" + i + ".png";
 		}
-		armor.frames = imageArray;
-		armor.duration = 0.125;
-
+		
+		AnimatedImage armor = new AnimatedImage(imageArray, 0.125, 70, 70);
+		
 		return armor;
 
 	}
 
 	public AnimatedImage healthSprite() throws FileNotFoundException {
 
-		AnimatedImage health = new AnimatedImage();
-
-		Image[] imageArray = new Image[4];
+		String[] imageArray = new String[4];
 		for (int i = 0; i < 4; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/Heart" + i + ".png"), 90, 90, false, false);
+			imageArray[i] = "sprites/Heart" + i + ".png";
 		}
-		health.frames = imageArray;
-		health.duration = 0.125;
-
+		
+		AnimatedImage health = new AnimatedImage(imageArray, 0.125, 90, 90);
+		
 		return health;
 
 	}

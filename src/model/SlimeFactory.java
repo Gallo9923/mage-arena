@@ -1,11 +1,9 @@
 package model;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javafx.scene.image.Image;
 
 public class SlimeFactory implements MobFactory{
 	
@@ -57,15 +55,13 @@ public class SlimeFactory implements MobFactory{
 	
 	public AnimatedImage slimeSprite() throws FileNotFoundException {
 
-		AnimatedImage slime = new AnimatedImage();
-
-		Image[] imageArray = new Image[3];
+		String[] imageArray = new String[3];
 		for (int i = 0; i < 3; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/PinkSlime" + i + ".png"), 80, 80, false, false);
+			imageArray[i] = "sprites" + File.separator + "PinkSlime" + i + ".png";
 		}
-		slime.frames = imageArray;
-		slime.duration = 0.300;
 
+		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 80, 80);
+		
 		return slime;
 
 	}

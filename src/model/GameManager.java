@@ -1,16 +1,13 @@
 package model;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import customExceptions.UserAlreadyExistException;
 import customExceptions.UserNotFoundException;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.AnimatedImage;
@@ -34,59 +31,55 @@ public class GameManager implements Serializable {
 		this.saves = new ArrayList<Player>();
 	}
 
-	
 	public String matchName() {
-		
+
 		String save = "save-";
-		int cont = 1; 
+		int cont = 1;
 		boolean found = false;
-		
-		
-		while(found == false) {
-			
+
+		while (found == false) {
+
 			boolean same = false;
-			
-			for(int i=0; i<saves.size() && same == false; i++) {
-				
+
+			for (int i = 0; i < saves.size() && same == false; i++) {
+
 				String saveName = save + cont;
-				
-				if(saveName.equals(saves.get(i).getSaveName())) {
+
+				if (saveName.equals(saves.get(i).getSaveName())) {
 					cont++;
 					same = true;
 				}
-				
+
 			}
-			
-			if(same == false) {
+
+			if (same == false) {
 				found = true;
 			}
-			
+
 		}
-		
+
 		return save + cont;
 	}
-	
+
 	public void saveGame() {
 
 		match.setSaveName(matchName());
-		
 		saves.add(match);
 	}
 
 	public ArrayList<Score> getScores() {
-		
+
 		ArrayList<Score> scoresAL = new ArrayList<Score>();
-		
+
 		Score curr = scores;
-		
-		while(curr != null) {
-			
+
+		while (curr != null) {
+
 			scoresAL.add(curr);
 			curr = curr.getNext();
-			
+
 		}
-		
-		
+
 		return scoresAL;
 	}
 
@@ -276,16 +269,12 @@ public class GameManager implements Serializable {
 
 	public AnimatedImage mageSprite() throws FileNotFoundException {
 
-		AnimatedImage mage = new AnimatedImage();
-
-		Image[] imageArray = new Image[2];
+		String[] imageArray = new String[2];
 		for (int i = 0; i < 2; i++) {
-			imageArray[i] = new Image(new FileInputStream("sprites/OrangeMage" + i + ".png"), MAGE_WIDTH, MAGE_HEIGHT,
-					false, false);
-			;
+			imageArray[i] = "sprites/OrangeMage" + i + ".png";
 		}
-		mage.frames = imageArray;
-		mage.duration = 0.200;
+
+		AnimatedImage mage = new AnimatedImage(imageArray, 0.200, MAGE_WIDTH, MAGE_HEIGHT);
 
 		return mage;
 
