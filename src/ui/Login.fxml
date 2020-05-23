@@ -60,13 +60,13 @@
                               <Font size="36.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" text="Register" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#register" text="Register" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                            <font>
                               <Font size="36.0" />
                            </font>
                         </Button>
-                        <TextField prefHeight="40.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <PasswordField prefHeight="40.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <TextField fx:id="username" prefHeight="40.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <PasswordField fx:id="password" prefHeight="40.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
                </children>

@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class SlimeMovement implements Movement{
+public class SlimeMovement implements Movement, Serializable{
 
+	private static final long serialVersionUID = 299327592650627822L;
 	public static final int TURN_SPEED = 50;
 	public static final double SPEED = 1;
 	

@@ -2,6 +2,7 @@ package model;
 
 public abstract class Mob extends Entity {
 
+	private static final long serialVersionUID = 3567264014866794180L;
 	private double health;
 	private double damage;
 

@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
-public class PlayerMovement implements Movement{
+public class PlayerMovement implements Movement, Serializable{
 	
+	private static final long serialVersionUID = -1742767686780170839L;
 	private double xChange = 2.5;
 	private double yChange = 2.5;
 	

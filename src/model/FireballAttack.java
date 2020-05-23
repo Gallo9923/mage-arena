@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 
-public class FireballAttack implements Attack{
+public class FireballAttack implements Attack, Serializable{
 	
+	private static final long serialVersionUID = -8610077028202899734L;
 	private long lastTime = 0;
 	private double damage = 100;
 	

@@ -3,8 +3,16 @@ package ui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import customExceptions.UserAlreadyExistException;
+import customExceptions.UserNotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,8 +20,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -23,10 +40,21 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameManager;
 import model.Player;
+import model.Score;
+import model.ScoreDateComparator;
+import model.ScorePointsComparator;
+import model.User;
 
 public class GUIController {
 
 	private GameManager gameManager;
+	private Main main;
+
+	@FXML
+	private TextField username;
+
+	@FXML
+	private PasswordField password;
 
 	@FXML
 	private BorderPane mainPane;
@@ -58,13 +86,74 @@ public class GUIController {
 	private Timeline gameLoop;
 
 	@FXML
-    private Label losePoints;
+	private Label losePoints;
 
-    @FXML
-    private Label loseTime;
-	
-	public GUIController(GameManager gm) {
+	@FXML
+	private Label loseTime;
+
+	@FXML
+	private TableView<Score> scoreboardTable;
+
+	@FXML
+	private TableColumn<Score, String> usernameColumn;
+
+	@FXML
+	private TableColumn<Score, Double> pointsColumn;
+
+	@FXML
+	private TableColumn<Score, String> timeColumn;
+
+	@FXML
+	private TableColumn<Score, LocalDate> dateColumn;
+
+	public GUIController(GameManager gm, Main main) {
 		this.gameManager = gm;
+		this.main = main;
+	}
+
+	@FXML
+	public void displaySortedByDate(ActionEvent event) {
+		ArrayList<Score> scores = gameManager.getScores();
+		scores.sort(new ScoreDateComparator());
+		
+		initializeScoreTable(scores);
+		
+	}
+	
+	@FXML
+	public void displaySortedByScore(ActionEvent event) {
+		ArrayList<Score> scores = gameManager.getScores();
+		scores.sort(new ScorePointsComparator());
+		
+		initializeScoreTable(scores);
+		
+	}
+	
+	public void initializeScoreTable(ArrayList<Score> scores) {
+		ObservableList<Score> scoresOL = FXCollections.observableArrayList(scores);
+		scoreboardTable.setItems(scoresOL);
+		
+		usernameColumn.setCellValueFactory(new PropertyValueFactory<Score, String>("username"));
+		usernameColumn.setStyle("-fx-alignment: CENTER");
+		
+		pointsColumn.setCellValueFactory(new PropertyValueFactory<Score, Double>("score"));
+		pointsColumn.setStyle("-fx-alignment: CENTER");
+		
+		timeColumn.setCellValueFactory(new PropertyValueFactory<Score, String>("formattedDuration"));
+		timeColumn.setStyle("-fx-alignment: CENTER");
+		
+		dateColumn.setCellValueFactory(new PropertyValueFactory<Score, LocalDate>("date"));
+		dateColumn.setStyle("-fx-alignment: CENTER");
+	}
+	
+	
+
+	@FXML
+	void saveGame(ActionEvent event) {
+
+		gameManager.saveGame();
+		savedSucessfully();
+
 	}
 
 	@FXML
@@ -132,21 +221,15 @@ public class GUIController {
 
 		if (gameManager.isLose()) {
 			setSceneLose();
-		} else if (gameManager.isWon()) {
-			setSceneWon();
 		}
 
 	}
 
 	public void setSceneLose() {
-		
+
 		lostMenu.setVisible(true);
 		losePoints.setText(score.getText());
 		loseTime.setText(chronometer.getText());
-		
-	}
-
-	public void setSceneWon() {
 
 	}
 
@@ -231,9 +314,90 @@ public class GUIController {
 	}
 
 	@FXML
+	void register(ActionEvent event) {
+		String un = username.getText();
+		String pass = password.getText();
+
+		if (un.length() != 0 && pass.length() != 0) {
+
+			try {
+				gameManager.addUser(un, pass);
+			} catch (UserAlreadyExistException e) {
+				userAlreadyExist(e.getUsername());
+			}
+
+			username.setText("");
+			password.setText("");
+
+		} else {
+			invalidForm();
+		}
+
+	}
+
+	@FXML
 	private void login(ActionEvent event) throws IOException {
+
+		// TODO REMOVE WHEN FINISH
 		setSceneMenu(event);
 
+		String un = username.getText();
+		String pass = password.getText();
+
+		username.setText("");
+		password.setText("");
+
+		if (un.length() != 0 && pass.length() != 0) {
+
+			try {
+				User user = gameManager.queryUser(un, pass);
+
+				if (user != null) {
+					gameManager.setCurrentUser(user);
+					setSceneMenu(event);
+				}
+
+			} catch (UserNotFoundException e) {
+				incorrectUser(e.getUsername());
+			}
+
+		} else {
+			invalidForm();
+		}
+
+	}
+
+	public void savedSucessfully() {
+		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		Alert alert = new Alert(AlertType.INFORMATION, "The match has been saved successfuly", ok);
+		alert.setTitle("Game");
+		alert.setHeaderText("Information");
+		alert.showAndWait();
+	}
+
+	public void userAlreadyExist(String msg) {
+		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		Alert alert = new Alert(AlertType.INFORMATION, "User " + msg + " Already exist. Choose another one.", ok);
+		alert.setTitle("Login");
+		alert.setHeaderText("Warning");
+		alert.showAndWait();
+	}
+
+	public void incorrectUser(String msg) {
+		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		Alert alert = new Alert(AlertType.INFORMATION, "User " + msg + " not found", ok);
+		alert.setTitle("Login");
+		alert.setHeaderText("Warning");
+		alert.showAndWait();
+	}
+
+	public void invalidForm() {
+		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		Alert alert = new Alert(AlertType.INFORMATION,
+				"Looks like some of the fields are missing or have invalid values, please try again.", ok);
+		alert.setTitle("Warning filling the survey");
+		alert.setHeaderText("Warning");
+		alert.showAndWait();
 	}
 
 	@FXML
@@ -264,7 +428,11 @@ public class GUIController {
 	}
 
 	@FXML
-	private void closeApplication(ActionEvent event) {
+	private void closeApplication(ActionEvent event) throws FileNotFoundException {
+
+		main.serializeScore();
+		main.serializeModel();
+		
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
 	}
@@ -284,6 +452,8 @@ public class GUIController {
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
 
+		displaySortedByScore(event);
+
 		mainPane.setCenter(stackPane);
 	}
 
@@ -299,6 +469,10 @@ public class GUIController {
 			gameLoop.stop();
 		}
 
+	}
+
+	public User queryUser(String username) {
+		return gameManager.queryUser(username);
 	}
 
 }

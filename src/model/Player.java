@@ -1,6 +1,7 @@
 package model;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -8,10 +9,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class Player extends Entity {
+public class Player extends Entity{
 
+	private static final long serialVersionUID = -6549749374819736742L;
 	public static final double MAX_HEALTH = 100;
 	public static final double MAX_ARMOR = 100;
+	
+	private GameManager gameManager;
+	private User user;
+	private LocalDate date;
 	
 	private HashSet<String> currentlyActiveKeys;
 
@@ -32,9 +38,16 @@ public class Player extends Entity {
 	private long pauseTime1;
 	private long pauseTime2;
 	
-	public Player(AnimatedImage sprite, double posX, double posY, Movement movement, Attack attack)
+	private String saveName;
+	
+	public Player(GameManager gameManager, User user, AnimatedImage sprite, double posX, double posY, Movement movement, Attack attack)
 			throws FileNotFoundException {
 		super(sprite, posX, posY, 45, 54, 50, 45, movement, attack);
+		
+		this.gameManager = gameManager;
+		this.user = user;
+		date = LocalDate.now();
+		
 		health = MAX_HEALTH;
 
 		currentlyActiveKeys = new HashSet<String>();
@@ -103,6 +116,7 @@ public class Player extends Entity {
 			
 			if(entity instanceof Player && ((Player) entity).getHealth() <= 0) {
 				
+				lose();
 				lose = true;
 				entities.remove(i);
 				i = i-1;
@@ -116,6 +130,12 @@ public class Player extends Entity {
 			}
 			
 		}
+	}
+	
+	private void lose() {
+		
+		gameManager.addScore(gameManager.getCurrentUser(), score, chronometer, date);
+		
 	}
 	
 	private void updateLoop() {
@@ -282,5 +302,20 @@ public class Player extends Entity {
 		return lose;
 	}
 	
+	public User getUser() {
+		return user;
+	}
+	
+	public LocalDate getDate() {
+		return date;
+	}
+	
+	public String getSaveName() {
+		return saveName;
+	}
+	
+	public void setSaveName(String saveName) {
+		this.saveName = saveName;
+	}
 	
 }

@@ -1,7 +1,10 @@
 package model;
 
-public class SlimeAttack implements Attack{
+import java.io.Serializable;
+
+public class SlimeAttack implements Attack, Serializable{
 	
+	private static final long serialVersionUID = -5388217505030785486L;
 	private long lastTime = 0;
 	private double damage = 15;
 	

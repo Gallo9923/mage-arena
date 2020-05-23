@@ -1,10 +1,13 @@
 package model;
 
+import java.io.Serializable;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Entity implements Update {
+public abstract class Entity implements Update, Serializable{
 
+	private static final long serialVersionUID = 1391224659788340840L;
 	private AnimatedImage sprite;
 	private double posX;
 	private double posY;

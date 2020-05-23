@@ -1,7 +1,10 @@
 package model;
 
-public class ArmorPerkAttack implements Attack{
+import java.io.Serializable;
 
+public class ArmorPerkAttack implements Attack, Serializable{
+	
+	private static final long serialVersionUID = -7084016586950639511L;
 	private double armorGained = 25;
 	
 	@Override

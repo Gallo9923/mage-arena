@@ -36,11 +36,12 @@
             <HBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0" />
-                  <TableView prefHeight="132.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="scoreboardTable" prefHeight="300.0" prefWidth="886.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="218.0" text="Username" />
-                      <TableColumn prefWidth="214.0" text="Points" />
-                        <TableColumn minWidth="0.0" prefWidth="247.0" text="Time" />
+                      <TableColumn fx:id="usernameColumn" prefWidth="207.0" text="Username" />
+                      <TableColumn fx:id="pointsColumn" prefWidth="206.0" text="Points" />
+                        <TableColumn fx:id="timeColumn" minWidth="0.0" prefWidth="223.0" text="Time" />
+                        <TableColumn fx:id="dateColumn" prefWidth="180.0" text="Date" />
                     </columns>
                   </TableView>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0" />
@@ -56,8 +57,8 @@
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" text="Score 1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
-                  <Button mnemonicParsing="false" text="Score 2" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#displaySortedByScore" text="Sort by score" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#displaySortedByDate" text="Sort by date" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
