@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+import customExceptions.AccessDeniedException;
 import customExceptions.SaveNotFoundException;
 import customExceptions.UserAlreadyExistException;
 import customExceptions.UserNotFoundException;
@@ -39,6 +41,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameManager;
+import model.Log;
 import model.Player;
 import model.Score;
 import model.ScoreDateComparator;
@@ -119,7 +122,22 @@ public class GUIController {
 	private TableColumn<Player, String> gameTimeColumn;
 
 	@FXML
+	private TextField logsLabel;
+
+	@FXML
 	private TextField saveNameLabel;
+
+	@FXML
+	private TableView<Log> logsTableView;
+
+	@FXML
+	private TableColumn<Log, String> usernameLogsColumn;
+
+	@FXML
+	private TableColumn<Log, LocalDate> dateLogsColumn;
+
+	@FXML
+	private TableColumn<Log, String> timeLogsColumn;
 
 	public GUIController(GameManager gm, Main main) {
 		this.gameManager = gm;
@@ -128,14 +146,12 @@ public class GUIController {
 
 	@FXML
 	void loadGame(ActionEvent event) throws IOException {
-		
-		//TODO
-		
+
 		String saveGameSTR = saveNameLabel.getText();
-		
+
 		try {
 			gameManager.loadGame(saveGameSTR);
-		
+
 			Image arena = new Image(new FileInputStream("sprites/Arena.png"));
 
 			// Initialize FXML
@@ -189,20 +205,18 @@ public class GUIController {
 
 			gameLoop.getKeyFrames().add(kf);
 			gameLoop.play();
-			
-			
-		}catch(SaveNotFoundException e) {
-			
+
+		} catch (SaveNotFoundException e) {
+
 			ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 			Alert alert = new Alert(AlertType.INFORMATION, "The save " + e.getSaveName() + " was not found", ok);
 			alert.setTitle("Load Game");
 			alert.setHeaderText("Warning");
 			alert.showAndWait();
 		}
-		
+
 	}
 
-	
 	@FXML
 	public void displaySortedByDate(ActionEvent event) {
 		ArrayList<Score> scores = gameManager.getScores();
@@ -530,15 +544,105 @@ public class GUIController {
 
 	@FXML
 	private void setSceneLogs(ActionEvent event) throws IOException {
-		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Logs.fxml"));
-		fxmlLoader2.setController(this);
-		StackPane stackPane = fxmlLoader2.load();
 
-		mainPane.setCenter(stackPane);
+		try {
+			gameManager.isAdmin(gameManager.getCurrentUser().getUsername());
+
+			FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Logs.fxml"));
+			fxmlLoader2.setController(this);
+			StackPane stackPane = fxmlLoader2.load();
+
+			// TODO initializeTableView
+			displayLogs();
+
+			mainPane.setCenter(stackPane);
+
+		} catch (AccessDeniedException e) {
+			accessDenied(e.getUsername());
+		}
+
+	}
+
+	private void accessDenied(String username) {
+		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+		Alert alert = new Alert(AlertType.INFORMATION, "The user" + username + " does not have access", ok);
+		alert.setTitle("Login");
+		alert.setHeaderText("Warning");
+		alert.showAndWait();
+	}
+	
+	private void displayLogs() {
+		// TODO initialize TableView
+
+		ArrayList<Log> logs = (ArrayList<Log>) gameManager.inOrderLogs();
+		initializeLogsTable(logs);
+
+	}
+
+	@FXML
+	void displayLogsByDate(ActionEvent event) {
+
+		try {
+			String date = logsLabel.getText();
+			ArrayList<Log> logs = gameManager.logsByDate(date);
+			initializeLogsTable(logs);
+		} catch (DateTimeParseException e) {
+			invalidForm();
+		}
+
+	}
+
+	@FXML
+	void displayLogsBySessionTime(ActionEvent event) {
+		try {
+			String duration = logsLabel.getText();
+
+			if (duration.split(":").length == 2) {
+				ArrayList<Log> logs = gameManager.logsBySessionTime(duration);
+				initializeLogsTable(logs);
+			} else {
+				invalidForm();
+			}
+
+		} catch (NumberFormatException e) {
+			invalidForm();
+		}
+	}
+
+	@FXML
+	void displayLogsByUsername(ActionEvent event) {
+
+		String username = logsLabel.getText();
+		ArrayList<Log> logs = gameManager.logsByUsername(username);
+		initializeLogsTable(logs);
+
+	}
+
+	private void initializeLogsTable(ArrayList<Log> logs) {
+
+		ObservableList<Log> logsOL = FXCollections.observableArrayList(logs);
+		logsTableView.setItems(logsOL);
+
+		usernameLogsColumn.setCellValueFactory(new PropertyValueFactory<Log, String>("username"));
+		usernameLogsColumn.setStyle("-fx-alignment: CENTER");
+
+		dateLogsColumn.setCellValueFactory(new PropertyValueFactory<Log, LocalDate>("date"));
+		;
+		dateLogsColumn.setStyle("-fx-alignment: CENTER");
+
+		timeLogsColumn.setCellValueFactory(new PropertyValueFactory<Log, String>("formattedSessionTime"));
+		timeLogsColumn.setStyle("-fx-alignment: CENTER");
+
 	}
 
 	@FXML
 	private void closeApplication(ActionEvent event) throws FileNotFoundException {
+
+		// TODO Add log
+		gameManager.addLog();
+
+		// TODO reset session start
+		gameManager.resetSessionStart();
 
 		main.serializeScore();
 		main.serializeModel();
@@ -574,8 +678,8 @@ public class GUIController {
 
 	@FXML
 	private void setSceneMenu(ActionEvent event) throws IOException {
-		//TODO 
-		
+		// TODO Sesion Time
+
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Menu.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
@@ -585,9 +689,13 @@ public class GUIController {
 		if (gameLoop != null) {
 			gameLoop.stop();
 		}
-		
+
+		if (gameManager.getSessionStart() == -1) {
+			gameManager.setSessionStart();
+		}
+
 		gameManager.setMatch(null);
-		
+
 	}
 
 	public User queryUser(String username) {

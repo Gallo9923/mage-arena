@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
@@ -47,18 +46,18 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField prefHeight="40.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button mnemonicParsing="false" prefHeight="51.0" prefWidth="83.0" text="Username" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <TextField fx:id="logsLabel" prefHeight="40.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Button mnemonicParsing="false" onAction="#displayLogsByUsername" prefHeight="51.0" prefWidth="83.0" text="Username" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="51.0" prefWidth="83.0" text="Date" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#displayLogsByDate" prefHeight="51.0" prefWidth="83.0" text="Date" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="51.0" prefWidth="117.0" text="Session Time" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+                        <Button mnemonicParsing="false" onAction="#displayLogsBySessionTime" prefHeight="51.0" prefWidth="117.0" text="Session Time" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -69,11 +68,11 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0" VBox.vgrow="NEVER">
                <children>
-                  <TableView prefHeight="300.0" prefWidth="497.0">
+                  <TableView fx:id="logsTableView" prefHeight="300.0" prefWidth="497.0">
                     <columns>
-                      <TableColumn prefWidth="179.0" text="Username" />
-                      <TableColumn prefWidth="170.0" text="Date" />
-                        <TableColumn prefWidth="147.0" text="Session Time" />
+                      <TableColumn fx:id="usernameLogsColumn" prefWidth="179.0" text="Username" />
+                      <TableColumn fx:id="dateLogsColumn" prefWidth="170.0" text="Date" />
+                        <TableColumn fx:id="timeLogsColumn" prefWidth="147.0" text="Session Time" />
                     </columns>
                   </TableView>
                </children>

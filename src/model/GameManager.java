@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import customExceptions.AccessDeniedException;
 import customExceptions.SaveNotFoundException;
 import customExceptions.UserAlreadyExistException;
 import customExceptions.UserNotFoundException;
@@ -25,14 +26,166 @@ public class GameManager implements Serializable {
 	private User users;
 	private User currentUser;
 	private ArrayList<Player> saves;
+	private Log logs;
+	private ArrayList<String> admins;
+	
+	private long sessionStart;
 
 	public GameManager() {
 		this.match = null;
 		this.scores = null;
 		this.users = null;
+		this.logs = null;
 		this.saves = new ArrayList<Player>();
+		this.sessionStart = -1;
+		
+		this.admins = new ArrayList<String>();
+		admins.add("Admin");
 	}
+	
+	public void isAdmin(String username) throws AccessDeniedException {
+		
+		 if(admins.contains(username) == false) {
+			 throw new AccessDeniedException(username);
+		 }
+		
+	}
+	
+	public ArrayList<Log> logsBySessionTime(String duration){
+		
+		//Add Throw Exception at bad parsing
+		
+		ArrayList<Log> logs = (ArrayList<Log>)inOrderLogs();
+		ArrayList<Log> newLogs = new ArrayList<Log>();
+		
+		String[] d = duration.split(":");
+		
+		long minutes = Long.parseLong(d[0]) * 60000;
+		long seconds = Long.parseLong(d[1]) * 1000;
+				
+		Long dur = minutes + seconds;
+		
+		for(int i=0; i<logs.size(); i++) {
+			
+			Log log = logs.get(i);
+			
+			if(log.getSessionTime() <= dur) {
+				newLogs.add(log);
+			}
+			
+		}
+		
+		return newLogs;
+		
+	}
+	
+	public ArrayList<Log> logsByDate(String date) {
+		
+		//TODO Throw Exception if not parse able
+		
+		ArrayList<Log> logs = (ArrayList<Log>)inOrderLogs();
+		ArrayList<Log> newLogs = new ArrayList<Log>();
+		
+		LocalDate LDdate = LocalDate.parse(date);
+		
+		for(int i=0; i<logs.size(); i++) {
+			
+			Log log = logs.get(i);
+			
+			if(LDdate.equals(log.getDate())) {
+				newLogs.add(log);
+			}
+			
+		}
+		
+		return newLogs;
+		
+	}
+	
+	public ArrayList<Log> logsByUsername(String username){
+		ArrayList<Log> logs = (ArrayList<Log>)inOrderLogs();
+		ArrayList<Log> newLogs = new ArrayList<Log>();
+		
+		
+		for(int i=0; i<logs.size(); i++) {
+			
+			Log log = logs.get(i);
+			
+			if(username.equals(log.getUser().getUsername())) {
+				newLogs.add(log);
+			}
+			
+		}
+		
+		return newLogs;
+		
+	}
+	
+	public List<Log> inOrderLogs(){
+        return inOrderLogs(logs);
+    }
+    
+    private List<Log> inOrderLogs(Log e){
+        
+        ArrayList<Log> logsList = new ArrayList<Log>();
+        
+        if(e!= null){
+            
+            if(e.getLeft() != null){
+                 logsList.addAll(inOrderLogs(e.getLeft()));
+            }
+            
+            logsList.add(e);
+            
+            if(e.getRight() != null){
+                
+                logsList.addAll(inOrderLogs(e.getRight()));
+            }
+            
+        }
+        
+        return logsList;
+                
+    }
+	
+	public void addLog() {
+		
+		long sessionTime = System.currentTimeMillis() - sessionStart;
+		LocalDate date = LocalDate.now();
+		
+		if (logs == null) {
+			logs = new Log(currentUser, sessionTime, date);
+		} else {
+			addLog(logs, currentUser, sessionTime, date);
+		}
+	}
+	
+	private void addLog(Log curr, User user, long sessionTime, LocalDate date) {
+		
+		if (sessionTime <= curr.getSessionTime()) {
 
+			Log left = curr.getLeft();
+
+			if (left == null) {
+				curr.setLeft(new Log(currentUser, sessionTime, date));
+				curr.getLeft().setParent(curr);
+			} else {
+				addLog(left, currentUser, sessionTime, date);
+			}
+
+		} else {
+
+			Log right = curr.getRight();
+
+			if (right == null) {
+				curr.setRight(new Log(currentUser, sessionTime, date));
+				curr.getRight().setParent(curr);
+			} else {
+				addLog(right, currentUser, sessionTime, date);
+			}
+		}
+	}
+	
 	public void loadGame(String saveName) throws SaveNotFoundException {
 		//TODO agregar match = game
 		Player game = querySaves(saveName);
@@ -391,6 +544,17 @@ public class GameManager implements Serializable {
 		this.match = match;
 	}
 
+	public long getSessionStart() {
+		return sessionStart;
+	}
+
+	public void setSessionStart() {
+		this.sessionStart = System.currentTimeMillis();
+	}
+	
+	public void resetSessionStart() {
+		this.sessionStart = -1;
+	}
 	
 	
 }

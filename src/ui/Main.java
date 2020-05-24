@@ -70,8 +70,21 @@ public class Main extends Application {
 			@Override
 			public void handle(WindowEvent event) {
 				try {
+					
+					//TODO Add log
+					if(gameManager.getSessionStart() != -1) {
+						gameManager.addLog();
+					}
+				
+					//TODO reset session start
+					gameManager.resetSessionStart();
+					
+					
 					serializeScore();
 					serializeModel();
+					
+					
+					//TODO not doing nothing, also check ExitApp method
 					gameManager.setMatch(null);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
