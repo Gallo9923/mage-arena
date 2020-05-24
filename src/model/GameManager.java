@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import customExceptions.SaveNotFoundException;
 import customExceptions.UserAlreadyExistException;
 import customExceptions.UserNotFoundException;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,6 +31,34 @@ public class GameManager implements Serializable {
 		this.scores = null;
 		this.users = null;
 		this.saves = new ArrayList<Player>();
+	}
+
+	public void loadGame(String saveName) throws SaveNotFoundException {
+		//TODO agregar match = game
+		Player game = querySaves(saveName);
+		match = game;
+	}
+	
+	public Player querySaves(String saveName) throws SaveNotFoundException {
+		// TODO
+		boolean found = false;
+		Player curr = null;
+
+		for (int i = 0; i < saves.size() && found == false; i++) {
+
+			curr = saves.get(i);
+
+			if (saveName.equalsIgnoreCase(curr.getSaveName())) {
+				found = true;
+			}
+		}
+		
+		if(curr == null) {
+			throw new SaveNotFoundException(saveName);
+		}
+		
+		return curr;
+		
 	}
 
 	public String matchName() {
@@ -62,8 +92,11 @@ public class GameManager implements Serializable {
 	}
 
 	public void saveGame() {
-
+		
+		//TODO add Cloned Object
+		
 		match.setSaveName(matchName());
+		
 		saves.add(match);
 	}
 
@@ -326,6 +359,10 @@ public class GameManager implements Serializable {
 
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
+	}
+
+	public ArrayList<Player> getSaves() {
+		return saves;
 	}
 
 }

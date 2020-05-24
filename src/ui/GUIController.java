@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import customExceptions.SaveNotFoundException;
 import customExceptions.UserAlreadyExistException;
 import customExceptions.UserNotFoundException;
 import javafx.animation.KeyFrame;
@@ -105,47 +106,156 @@ public class GUIController {
 	@FXML
 	private TableColumn<Score, LocalDate> dateColumn;
 
+	@FXML
+	private TableView<Player> loadGamesTable;
+
+	@FXML
+	private TableColumn<Player, String> saveNameColumn;
+
+	@FXML
+	private TableColumn<Player, LocalDate> loadGameDateColumn;
+
+	@FXML
+	private TableColumn<Player, String> gameTimeColumn;
+
+	@FXML
+	private TextField saveNameLabel;
+
 	public GUIController(GameManager gm, Main main) {
 		this.gameManager = gm;
 		this.main = main;
 	}
 
 	@FXML
+	void loadGame(ActionEvent event) throws IOException {
+		
+		//TODO
+		
+		String saveGameSTR = saveNameLabel.getText();
+		
+		try {
+			gameManager.loadGame(saveGameSTR);
+		
+			Image arena = new Image(new FileInputStream("sprites/Arena.png"));
+
+			// Initialize FXML
+			FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Arena.fxml"));
+			fxmlLoader2.setController(this);
+			StackPane stackPane = fxmlLoader2.load();
+
+			lostMenu.setVisible(false);
+			pauseMenu.setVisible(true);
+			mainPane.setCenter(stackPane);
+			playerHealth.setStyle("-fx-accent: red");
+
+			// arenaMainStackPane.requestFocus();
+			initializeActionHandlers();
+
+			// Initialize Game
+
+			// Initialize Graphics
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+
+			gameLoop = new Timeline();
+			gameLoop.setCycleCount(Timeline.INDEFINITE);
+
+			final long timeStart = System.currentTimeMillis();
+
+			// Game Loop
+			KeyFrame kf = new KeyFrame(Duration.seconds(0.017), // 60 FPS
+					new EventHandler<ActionEvent>() {
+
+						public void handle(ActionEvent ae) {
+
+							// Initialize Canvas
+							double t = (System.currentTimeMillis() - timeStart) / 1000.0;
+							gc.clearRect(0, 0, 1280, 720);
+
+							gc.drawImage(arena, 0, 0);
+
+							// Game Logic
+
+							try {
+								updateEntities();
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							}
+							renderEntities(gc, t);
+
+							matchEndedCheckLoop();
+
+						}
+					});
+
+			gameLoop.getKeyFrames().add(kf);
+			gameLoop.play();
+			
+			
+		}catch(SaveNotFoundException e) {
+			
+			ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+			Alert alert = new Alert(AlertType.INFORMATION, "The save " + e.getSaveName() + " was not found", ok);
+			alert.setTitle("Load Game");
+			alert.setHeaderText("Warning");
+			alert.showAndWait();
+		}
+		
+	}
+
+	
+	@FXML
 	public void displaySortedByDate(ActionEvent event) {
 		ArrayList<Score> scores = gameManager.getScores();
 		scores.sort(new ScoreDateComparator());
-		
+
 		initializeScoreTable(scores);
-		
+
 	}
-	
+
 	@FXML
 	public void displaySortedByScore(ActionEvent event) {
 		ArrayList<Score> scores = gameManager.getScores();
 		scores.sort(new ScorePointsComparator());
-		
+
 		initializeScoreTable(scores);
-		
+
 	}
-	
+
 	public void initializeScoreTable(ArrayList<Score> scores) {
 		ObservableList<Score> scoresOL = FXCollections.observableArrayList(scores);
 		scoreboardTable.setItems(scoresOL);
-		
+
 		usernameColumn.setCellValueFactory(new PropertyValueFactory<Score, String>("username"));
 		usernameColumn.setStyle("-fx-alignment: CENTER");
-		
+
 		pointsColumn.setCellValueFactory(new PropertyValueFactory<Score, Double>("score"));
 		pointsColumn.setStyle("-fx-alignment: CENTER");
-		
+
 		timeColumn.setCellValueFactory(new PropertyValueFactory<Score, String>("formattedDuration"));
 		timeColumn.setStyle("-fx-alignment: CENTER");
-		
+
 		dateColumn.setCellValueFactory(new PropertyValueFactory<Score, LocalDate>("date"));
 		dateColumn.setStyle("-fx-alignment: CENTER");
 	}
-	
-	
+
+	public void displayLoadGames() {
+		ArrayList<Player> saves = gameManager.getSaves();
+		initializeLoadGamesTable(saves);
+	}
+
+	public void initializeLoadGamesTable(ArrayList<Player> saves) {
+		ObservableList<Player> savesOL = FXCollections.observableArrayList(saves);
+		loadGamesTable.setItems(savesOL);
+
+		saveNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("saveName"));
+		saveNameColumn.setStyle("-fx-alignment: CENTER");
+
+		loadGameDateColumn.setCellValueFactory(new PropertyValueFactory<Player, LocalDate>("date"));
+		loadGameDateColumn.setStyle("-fx-alignment: CENTER");
+
+		gameTimeColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("formattedDuration"));
+		gameTimeColumn.setStyle("-fx-alignment: CENTER");
+	}
 
 	@FXML
 	void saveGame(ActionEvent event) {
@@ -431,22 +541,27 @@ public class GUIController {
 
 		main.serializeScore();
 		main.serializeModel();
-		
+
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.close();
 	}
 
 	@FXML
 	private void setSceneLoadGame(ActionEvent event) throws IOException {
+
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("LoadGames.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
 
+		displayLoadGames();
+
 		mainPane.setCenter(stackPane);
+
 	}
 
 	@FXML
 	private void setSceneScoreboard(ActionEvent event) throws IOException {
+
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Scoreboard.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();

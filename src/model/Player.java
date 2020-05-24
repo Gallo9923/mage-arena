@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class Player extends Entity{
+public class Player extends Entity implements Cloneable{
 
 	private static final long serialVersionUID = -6549749374819736742L;
 	public static final double MAX_HEALTH = 100;
@@ -308,6 +308,16 @@ public class Player extends Entity{
 	
 	public LocalDate getDate() {
 		return date;
+	}
+	
+	public String getFormattedDuration() {
+
+		long seconds = (chronometer / 1000) % 60;
+		long minutes = (chronometer / 60000) % 60;
+		String sSec = seconds < 10 ? ("0" + seconds) : ("" + seconds);
+		String sMin = minutes < 10 ? ("0" + minutes) : ("" + minutes);
+
+		return sMin + ":" + sSec;
 	}
 	
 	public String getSaveName() {

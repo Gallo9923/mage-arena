@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -33,22 +34,46 @@
                   </Label>
                </children>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <GridPane prefHeight="100.0" prefWidth="532.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="227.0" minWidth="10.0" prefWidth="116.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="209.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="0.0" prefWidth="116.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#loadGame" prefHeight="38.0" prefWidth="130.0" text="Load Game" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <Label text="Save Name: ">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="saveNameLabel" maxWidth="-Infinity" prefHeight="35.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font></TextField>
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0" />
-                  <TableView prefHeight="132.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="loadGamesTable" prefHeight="132.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
                     <columns>
-                      <TableColumn prefWidth="218.0" text="Save name" />
-                      <TableColumn prefWidth="214.0" text="Date" />
-                        <TableColumn minWidth="0.0" prefWidth="247.0" text="Hour" />
+                      <TableColumn fx:id="saveNameColumn" prefWidth="218.0" text="Save name" />
+                      <TableColumn fx:id="loadGameDateColumn" prefWidth="214.0" text="Date" />
+                        <TableColumn fx:id="gameTimeColumn" minWidth="0.0" prefWidth="247.0" text="Hour" />
                     </columns>
                   </TableView>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button mnemonicParsing="false" text="Load Game" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
