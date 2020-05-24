@@ -328,4 +328,29 @@ public class Player extends Entity implements Cloneable{
 		this.saveName = saveName;
 	}
 	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		
+		Player clone = (Player) super.clone();
+		
+		ArrayList<Entity> entitiesClone = new ArrayList<Entity>();
+		
+		for(int i=0; i < entities.size(); i++) {
+			
+			Entity entity = entities.get(i);
+			
+			if(entity instanceof Player) {
+				entitiesClone.add(clone);
+			}else {
+				entitiesClone.add((Entity) entity.clone());
+			}
+		
+		}
+		
+		clone.entities = entitiesClone;
+		
+		return clone;
+		
+	}
+	
 }

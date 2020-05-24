@@ -72,6 +72,7 @@ public class Main extends Application {
 				try {
 					serializeScore();
 					serializeModel();
+					gameManager.setMatch(null);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}

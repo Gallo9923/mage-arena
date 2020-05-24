@@ -36,7 +36,11 @@ public class GameManager implements Serializable {
 	public void loadGame(String saveName) throws SaveNotFoundException {
 		//TODO agregar match = game
 		Player game = querySaves(saveName);
-		match = game;
+		try {
+			match = (Player) game.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Player querySaves(String saveName) throws SaveNotFoundException {
@@ -53,7 +57,7 @@ public class GameManager implements Serializable {
 			}
 		}
 		
-		if(curr == null) {
+		if(found == false) {
 			throw new SaveNotFoundException(saveName);
 		}
 		
@@ -95,9 +99,15 @@ public class GameManager implements Serializable {
 		
 		//TODO add Cloned Object
 		
-		match.setSaveName(matchName());
-		
-		saves.add(match);
+		try {
+			
+			Player clone = (Player)match.clone();
+			clone.setSaveName(matchName());
+			saves.add(clone);
+			
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Score> getScores() {
@@ -365,4 +375,9 @@ public class GameManager implements Serializable {
 		return saves;
 	}
 
+	public void setMatch(Player match) {
+		this.match = match;
+	}
+
+	
 }

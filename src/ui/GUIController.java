@@ -262,6 +262,7 @@ public class GUIController {
 
 		gameManager.saveGame();
 		savedSucessfully();
+		arenaMainStackPane.requestFocus();
 
 	}
 
@@ -573,6 +574,8 @@ public class GUIController {
 
 	@FXML
 	private void setSceneMenu(ActionEvent event) throws IOException {
+		//TODO 
+		
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Menu.fxml"));
 		fxmlLoader2.setController(this);
 		StackPane stackPane = fxmlLoader2.load();
@@ -582,7 +585,9 @@ public class GUIController {
 		if (gameLoop != null) {
 			gameLoop.stop();
 		}
-
+		
+		gameManager.setMatch(null);
+		
 	}
 
 	public User queryUser(String username) {

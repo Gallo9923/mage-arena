@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Entity implements Update, Serializable{
+public abstract class Entity implements Update, Serializable, Cloneable{
 
 	private static final long serialVersionUID = 1391224659788340840L;
 	private AnimatedImage sprite;
@@ -158,6 +158,9 @@ public abstract class Entity implements Update, Serializable{
 		return offsetY;
 	}
 
-	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 }
