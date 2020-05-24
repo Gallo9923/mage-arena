@@ -239,7 +239,7 @@ public class GUIController {
 	}
 
 	public void displayLoadGames() {
-		ArrayList<Player> saves = gameManager.getSaves();
+		ArrayList<Player> saves = gameManager.getSaves(gameManager.getCurrentUser());
 		initializeLoadGamesTable(saves);
 	}
 

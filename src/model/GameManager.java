@@ -371,13 +371,26 @@ public class GameManager implements Serializable {
 		this.currentUser = currentUser;
 	}
 
-	public ArrayList<Player> getSaves() {
-		return saves;
+	public ArrayList<Player> getSaves(User user) {
+		
+		ArrayList<Player> saves2 = new ArrayList<Player>();
+		
+		for(int i=0; i<saves.size(); i++) {
+			
+			Player save = saves.get(i);
+			if(user.equals(save.getUser())) {
+				saves2.add(save);
+			}
+			
+		}
+		
+		return saves2;
 	}
 
 	public void setMatch(Player match) {
 		this.match = match;
 	}
 
+	
 	
 }
