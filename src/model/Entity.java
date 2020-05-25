@@ -35,6 +35,18 @@ public abstract class Entity implements Update, Serializable, Cloneable{
 		this.quadTrees = new ArrayList<QuadTree>();
 	}
 
+	public void addQuadTree(QuadTree qt) {
+		quadTrees.add(qt);
+	}
+	
+	public void resetQuadTree() {
+		quadTrees = new ArrayList<QuadTree>(); 
+	}
+	
+	public ArrayList<QuadTree> getQuadTrees() {
+		return quadTrees;
+	}
+	
 	public void render(GraphicsContext gc, double t) {
 		gc.drawImage(sprite.getFrame(t), posX, posY);
 		

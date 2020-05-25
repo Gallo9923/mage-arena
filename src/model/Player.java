@@ -41,6 +41,8 @@ public class Player extends Entity implements Cloneable {
 	private long pauseTime1;
 	private long pauseTime2;
 
+	private QuadTree qt;
+	
 	private int maxMobs = 3;
 
 	private String saveName;
@@ -63,7 +65,8 @@ public class Player extends Entity implements Cloneable {
 		maxMobs = 3;
 
 		toRemove = new ArrayList<Entity>();
-
+		qt = null;
+		
 		score = 0;
 		armor = 0;
 		paused = false;
@@ -79,8 +82,15 @@ public class Player extends Entity implements Cloneable {
 		if (paused == false && lose == false) {
 			updateChronometer();
 			createEntitiesLoop();
+			
+			updateQuadTreeLoop();
+			attackLoopQuadTree();
+			
 			// attackLoop();
-			attackThreadLoop(); // Testing
+			
+			//attackThreadLoop(); // Testing
+			
+			
 			removeEntitiesLoop();
 			//updateLoop();
 			updateThreadLoop();
@@ -88,6 +98,64 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
+	private void updateQuadTreeLoop() {
+		
+		qt = new QuadTree(0, 0, 1280, 720);
+		
+		for(int i=0; i<entities.size(); i++) {
+			Entity entity = entities.get(i);
+			entity.resetQuadTree();
+			qt.insert(entity);
+		}
+		
+	}
+	
+	private void attackLoopQuadTree() {
+
+		for (int i = 0; i < entities.size(); i++) {
+
+			Entity curr = entities.get(i);
+
+			if (curr instanceof Mob && curr.intersects(this)) {
+				curr.attack(this);
+
+			} else if (curr instanceof Spell) {
+
+				ArrayList<QuadTree> currQTs = curr.getQuadTrees();
+				
+				for(int j=0; j<currQTs.size(); j++) {
+					
+					QuadTree qt = currQTs.get(j);
+					ArrayList<Entity> QTentities = qt.getQTEntities();
+					
+					for(int z=0; z<QTentities.size(); z++) {
+						
+						Entity auxEntity = QTentities.get(z);
+						
+						if(curr.equals(auxEntity) == false && auxEntity instanceof Mob && curr.intersects(auxEntity)) {
+							
+							gainScore(curr);
+							curr.attack(auxEntity);
+							entities.remove(curr);
+							i--;
+						
+						}
+						
+					}
+					
+					
+				}
+				
+				
+			} else if (curr instanceof Item && curr.intersects(this)) {
+				curr.attack(this);
+				entities.remove(curr);
+				i--;
+			}
+
+		}
+	}
+	
 	private void updateThreadLoop() {
 
 		int numberOfThreads = entities.size();

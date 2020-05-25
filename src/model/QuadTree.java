@@ -1,11 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
 
-public class QuadTree {
-	
+public class QuadTree implements Serializable{
+
+	private static final long serialVersionUID = 2262569611549874765L;
+
 	private QuadTree parent;
 	
 	private QuadTree northEast;
@@ -13,7 +16,7 @@ public class QuadTree {
 	private QuadTree southEast;
 	private QuadTree southWest;
 	
-	private int capacity = 4;
+	private int capacity = 4; //4
 	private ArrayList<Entity> QTentities;
 	private boolean divided = false;
 	
@@ -21,8 +24,6 @@ public class QuadTree {
 	private double y;
 	private double w; 
 	private double h;
-	
-	private Rectangle2D region;
 	
 	public QuadTree(double x, double y, double w, double h) {
 		
@@ -37,11 +38,12 @@ public class QuadTree {
 		this.w = w;
 		this.h = h;
 		
-		this.region = new Rectangle2D(x, y , w, h);
-		
 		this.QTentities = new ArrayList<Entity>();
 	}
-
+	
+	public ArrayList<Entity> getQTEntities(){
+		return QTentities;
+	}
 	
 	public void subdivide() {
 		
@@ -50,14 +52,26 @@ public class QuadTree {
 		this.southEast = new QuadTree(x + w/2, y+h/2, w/2, h/2);
 		this.southWest = new QuadTree(x, y + h/2, w/2, h/2);
 		
+		for(int i=0; i<QTentities.size(); i++) {
+			Entity entity = QTentities.get(i);
+			
+			northEast.insert(entity);
+			northWest.insert(entity);
+			southEast.insert(entity);
+			southWest.insert(entity);
+		}
+		
 	}
 	
 	public void insert(Entity entity) {
 		
+		Rectangle2D region = new Rectangle2D(x, y , w, h);
+		
 		if(region.intersects(entity.getBoundary())) {
 			
-			if(QTentities.size() <= capacity) {
+			if(QTentities.size() < capacity) {
 				QTentities.add(entity);
+				entity.addQuadTree(this);
 			}else {
 				
 				if(!divided) {
@@ -75,6 +89,9 @@ public class QuadTree {
 	}
 	
 	public boolean contains(Entity entity) {
-		return this.region.intersects(entity.getBoundary());
+		
+		Rectangle2D region = new Rectangle2D(x, y , w, h);
+		
+		return region.intersects(entity.getBoundary());
 	}
 }

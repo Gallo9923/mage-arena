@@ -52,7 +52,7 @@ public class SlimeFactory implements MobFactory{
 		
 		double y = r.nextInt(620) + 50;
 		
-		redSlime = new RedSlime(redSlimeSprite(), x, y, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		redSlime = new RedSlime(redSlimeSprite(), x, y, 90 ,75, 15, 22.5, 65, 20, new SlimeMovement(), new SlimeAttack());
 		
 		
 		return redSlime;
@@ -66,7 +66,7 @@ public class SlimeFactory implements MobFactory{
 		
 		double y = r.nextInt(620) + 50;
 	
-		slime = new Slime(slimeSprite(), x, y, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		slime = new Slime(slimeSprite(), x, y, 90 ,75, 15, 22.5, 65, 20, new SlimeMovement(), new SlimeAttack());
 		return slime;
 	}
 	
@@ -95,7 +95,7 @@ public class SlimeFactory implements MobFactory{
 			imageArray[i] = "sprites" + File.separator + "RedSlime" + i + ".png";
 		}
 
-		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 80, 80);
+		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 120, 120);
 		
 		return slime;
 	}
@@ -107,7 +107,7 @@ public class SlimeFactory implements MobFactory{
 			imageArray[i] = "sprites" + File.separator + "PinkSlime" + i + ".png";
 		}
 
-		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 80, 80);
+		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 120, 120);
 		
 		return slime;
 
