@@ -56,65 +56,19 @@
             <Insets left="60.0" top="80.0" />
          </StackPane.margin>
       </Label>
-      <StackPane fx:id="pauseMenu" prefHeight="150.0" prefWidth="200.0">
-         <children>
-            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="WHITE" height="532.0" opacity="0.5" stroke="BLACK" strokeType="INSIDE" width="449.0" />
-            <ImageView fitHeight="601.0" fitWidth="546.0" pickOnBounds="true" preserveRatio="true" />
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Game Paused">
-                           <font>
-                              <Font name="System Bold" size="72.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#resumeGame" text="Resume">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#saveGame" text="Save Game">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#setSceneMenu" text="Exit Game">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </StackPane>
       <StackPane fx:id="lostMenu" layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="WHITE" height="532.0" opacity="0.5" stroke="BLACK" strokeType="INSIDE" width="449.0" />
+            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="WHITE" height="557.0" opacity="0.5" stroke="BLACK" strokeType="INSIDE" width="449.0" />
             <ImageView fitHeight="601.0" fitWidth="546.0" pickOnBounds="true" preserveRatio="true" />
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="156.0" prefWidth="1280.0">
                      <children>
-                        <Label alignment="TOP_CENTER" prefHeight="126.0" prefWidth="292.0" text="You Lost">
-                           <font>
-                              <Font name="System Bold" size="72.0" />
-                           </font>
-                        </Label>
+                        <ImageView fitHeight="236.0" fitWidth="599.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../sprites/you_lost.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="167.0" prefWidth="1280.0">
@@ -155,6 +109,52 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="77.0" prefWidth="1280.0" />
                   <HBox alignment="CENTER" prefHeight="67.0" prefWidth="1280.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#setSceneMenu" text="Exit Game">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+      <StackPane fx:id="pauseMenu" prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="WHITE" height="532.0" opacity="0.5" stroke="BLACK" strokeType="INSIDE" width="595.0" />
+            <ImageView fitHeight="601.0" fitWidth="546.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="235.0" fitWidth="706.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../sprites/game_paused.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#resumeGame" text="Resume">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#saveGame" text="Save Game">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#setSceneMenu" text="Exit Game">
                            <font>

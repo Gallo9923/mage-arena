@@ -38,6 +38,8 @@ public class Player extends Entity implements Cloneable{
 	private long pauseTime1;
 	private long pauseTime2;
 	
+	private int maxMobs = 3;
+	
 	private String saveName;
 	
 	public Player(GameManager gameManager, User user, AnimatedImage sprite, double posX, double posY, Movement movement, Attack attack)
@@ -54,7 +56,9 @@ public class Player extends Entity implements Cloneable{
 
 		entities = new ArrayList<Entity>();
 		entities.add(this);
-
+		
+		maxMobs = 3;
+		
 		score = 0;
 		armor = 0;
 		paused = false;
@@ -96,6 +100,8 @@ public class Player extends Entity implements Cloneable{
 	
 	private void createEntitiesLoop() throws FileNotFoundException {
 		
+		SlimeFactory.getInstance().setMaxMobs(maxMobs);
+		
 		Mob mob = SlimeFactory.getInstance().createMob(this);
 		if(mob != null) {
 			entities.add(mob);
@@ -123,6 +129,7 @@ public class Player extends Entity implements Cloneable{
 				
 			}else if(entity instanceof Mob && ((Mob) entity).getHealth() <= 0) {
 				entities.remove(i);
+				maxMobs++;
 				i = i-1;
 			}else if(entity instanceof Spell && ((Spell) entity).intersectsWall()) {
 				entities.remove(i);
@@ -140,7 +147,20 @@ public class Player extends Entity implements Cloneable{
 	
 	private void updateLoop() {
 		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).update();
+			
+			Entity entity = entities.get(i);
+			
+			if(entity instanceof RedSlime) {
+				RedSlime redSlime = (RedSlime)entity;
+				redSlime.setDestX(this.getPosX() + this.getWidth()/2);
+				redSlime.setDestY(this.getPosY() + this.getHeight()/2);
+				redSlime.update();
+				
+			}else {
+				entities.get(i).update();
+			}
+			
+			
 		}
 	}
 	

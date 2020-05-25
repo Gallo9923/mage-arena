@@ -9,30 +9,65 @@ public class SlimeFactory implements MobFactory{
 	
 	private static SlimeFactory factory;
 	private int mobs;
-	
+	private int maxMobs;
 	
 	private SlimeFactory() {
 		mobs = 0;
+		maxMobs = 3;
 	}
 	
 	@Override
 	public Mob createMob(Entity entity) throws FileNotFoundException {
 		
-		Slime slime = null;
+		Mob mob = null;
 		countMobs(entity);
 		
-		if(mobs <= 3) {
+		if(mobs <= maxMobs) {
 			
 			Random r = new Random();
-			double x = r.nextInt(1180) + 50;
 			
-			double y = r.nextInt(620) + 50;
-		
-			slime = new Slime(slimeSprite(), x, y, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+			if(r.nextDouble() > 0.5) {
+				mob = createSlime();
+			}else {
+				mob = createRedSlime();
+			}
+			
+			
+			
 		}
 		
-		return slime;
+		return mob;
 		//return new Slime(slimeSprite(), 400, 400, 60 ,50, 10, 15, 65, 20, new NoMovement(), new SlimeAttack());
+	}
+	
+	public void setMaxMobs(int num) {
+		maxMobs = num;
+	}
+	
+	public Mob createRedSlime() throws FileNotFoundException {
+		
+		RedSlime redSlime = null;
+		Random r = new Random();
+		double x = r.nextInt(1180) + 50;
+		
+		double y = r.nextInt(620) + 50;
+		
+		redSlime = new RedSlime(redSlimeSprite(), x, y, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		
+		
+		return redSlime;
+	}
+	
+	
+	public Mob createSlime() throws FileNotFoundException {
+		Slime slime = null;
+		Random r = new Random();
+		double x = r.nextInt(1180) + 50;
+		
+		double y = r.nextInt(620) + 50;
+	
+		slime = new Slime(slimeSprite(), x, y, 60 ,50, 10, 15, 65, 20, new SlimeMovement(), new SlimeAttack());
+		return slime;
 	}
 	
 	public void countMobs(Entity entity) {
@@ -51,6 +86,18 @@ public class SlimeFactory implements MobFactory{
 		}
 		
 		mobs = counter;
+	}
+	
+	public AnimatedImage redSlimeSprite() throws FileNotFoundException{
+		
+		String[] imageArray = new String[3];
+		for (int i = 0; i < 3; i++) {
+			imageArray[i] = "sprites" + File.separator + "RedSlime" + i + ".png";
+		}
+
+		AnimatedImage slime = new AnimatedImage(imageArray, 0.300, 80, 80);
+		
+		return slime;
 	}
 	
 	public AnimatedImage slimeSprite() throws FileNotFoundException {

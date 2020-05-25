@@ -29,8 +29,6 @@ public class FireballFactory implements SpellsFactory {
 		double originX = x + entity.getWidth() / 2;
 		double originY = y + entity.getHeight() / 2;
 
-		System.out.println("X: " + originX + " Y: " + originY);
-
 		LinearMovement fireballMovement = new LinearMovement(originX, originY, clickX, clickY, 0.0125);
 
 		Fireball fb = new Fireball(fireballSprite(), x, y, 43, 43, 8, 8, fireballMovement, new FireballAttack());

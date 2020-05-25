@@ -47,7 +47,8 @@ public class Main extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void 
+	start(Stage primaryStage) throws Exception {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainPane.fxml"));
 		fxmlLoader.setController(controller);
@@ -83,9 +84,8 @@ public class Main extends Application {
 					serializeScore();
 					serializeModel();
 					
+		
 					
-					//TODO not doing nothing, also check ExitApp method
-					gameManager.setMatch(null);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
