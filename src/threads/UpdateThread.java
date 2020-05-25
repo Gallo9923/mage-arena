@@ -3,11 +3,9 @@ package threads;
 import java.util.ArrayList;
 
 import model.Entity;
-import model.Item;
-import model.Mob;
 import model.Player;
 import model.RedSlime;
-import model.Spell;
+
 
 public class UpdateThread extends Thread {
 
@@ -15,7 +13,7 @@ public class UpdateThread extends Thread {
 	private ArrayList<Entity> entities;
 	private int i;
 	private int j;
-
+	
 	public UpdateThread(Player player, ArrayList<Entity> entities, int i, int j) {
 		this.player = player;
 		this.entities = entities;

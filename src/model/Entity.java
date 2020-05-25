@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,6 +20,8 @@ public abstract class Entity implements Update, Serializable, Cloneable{
 	private double offsetX;
 	private double offsetY;
 	
+	private ArrayList<QuadTree> quadTrees;
+	
 	public Entity(AnimatedImage sprite, double posX, double posY, double width, double height, double offsetX, double offsetY, Movement movement, Attack attack) {
 		this.sprite = sprite;
 		this.posX = posX;
@@ -29,6 +32,7 @@ public abstract class Entity implements Update, Serializable, Cloneable{
 		this.offsetY = offsetY;
 		this.movement = movement;
 		this.attack = attack;
+		this.quadTrees = new ArrayList<QuadTree>();
 	}
 
 	public void render(GraphicsContext gc, double t) {
