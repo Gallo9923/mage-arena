@@ -4,13 +4,23 @@ import java.io.FileNotFoundException;
 
 
 public class FireballFactory implements SpellsFactory {
-
+	
+	/**
+	 * Instance of the Factory
+	 */
 	private static FireballFactory factory = null;
 
+	/**
+	 * Creates a new instance of the factory
+	 */
 	private FireballFactory() {
 
 	}
 
+	/**
+	 * Returns the instance of the factory
+	 * @return FireballFactory instance of the factory
+	 */
 	public static FireballFactory getInstance() {
 
 		if (factory == null) {
@@ -20,6 +30,10 @@ public class FireballFactory implements SpellsFactory {
 		return factory;
 	}
 
+	/**
+	 * Creates an instance of a Spell
+	 *@return Spell spell
+	 */
 	@Override
 	public Spell createSpell(Entity entity, double clickX, double clickY) throws FileNotFoundException {
 
@@ -36,7 +50,12 @@ public class FireballFactory implements SpellsFactory {
 		return fb;
 	}
 
-	public AnimatedImage fireballSprite() throws FileNotFoundException {
+	/**
+	 * Returns the fireball sprite
+	 * @return AnimatedImage sprite of the fireball
+	 * @throws FileNotFoundException 
+	 */
+	private AnimatedImage fireballSprite() throws FileNotFoundException {
 
 		String[] imageArray = new String[5];
 		for (int i = 0; i < 5; i++) {

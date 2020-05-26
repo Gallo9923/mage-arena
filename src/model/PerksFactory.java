@@ -6,16 +6,33 @@ import java.util.Random;
 
 
 public class PerksFactory implements ItemsFactory {
-
+	
+	/**
+	 * Instance of the class
+	 */
 	private static PerksFactory perksFactory;
 
+	/**
+	 * Amount of health items in the match
+	 */
 	private int health;
+	
+	/**
+	 * Amount of armor items in the match
+	 */
 	private int armor;
 
+	/**
+	 * Creates and instance of PerksFactory
+	 */
 	private PerksFactory() {
 
 	}
-
+	
+	/**
+	 * Creates an instance of an item 
+	 * @param player Current match
+	 */
 	@Override
 	public Item createItem(Player player) throws FileNotFoundException {
 
@@ -48,7 +65,11 @@ public class PerksFactory implements ItemsFactory {
 		return item;
 	}
 
-	public void countItems(ArrayList<Entity> entities) {
+	/**
+	 * Counts the amount of items in the match
+	 * @param entities Entities of the match
+	 */
+	private void countItems(ArrayList<Entity> entities) {
 
 		health = 0;
 		armor = 0;
@@ -66,8 +87,13 @@ public class PerksFactory implements ItemsFactory {
 		}
 
 	}
-
-	public AnimatedImage armorSprite() throws FileNotFoundException {
+	
+	/**
+	 * Returns animated image of the armor sprite
+	 * @return AnimatedImage armor sprite
+	 * @throws FileNotFoundException
+	 */
+	private AnimatedImage armorSprite() throws FileNotFoundException {
 
 		String[] imageArray = new String[4];
 		for (int i = 0; i < 4; i++) {
@@ -79,8 +105,13 @@ public class PerksFactory implements ItemsFactory {
 		return armor;
 
 	}
-
-	public AnimatedImage healthSprite() throws FileNotFoundException {
+	
+	/**
+	 * Returns the animated image of the health sprite
+	 * @return AnimatedImage health sprite
+	 * @throws FileNotFoundException
+	 */
+	private AnimatedImage healthSprite() throws FileNotFoundException {
 
 		String[] imageArray = new String[4];
 		for (int i = 0; i < 4; i++) {
@@ -93,6 +124,10 @@ public class PerksFactory implements ItemsFactory {
 
 	}
 
+	/**
+	 * Returns the instance of PerskFactory
+	 * @return PerksFactory 
+	 */
 	public static PerksFactory getInstance() {
 
 		if (perksFactory == null) {
