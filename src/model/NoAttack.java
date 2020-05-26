@@ -15,7 +15,7 @@ public class NoAttack implements Attack, Serializable{
 	
 	/**
 	 * No attack
-	 * @param Entity Entity to attack
+	 * @param entity  entity to attack
 	 */
 	@Override
 	public void attack(Entity entity) {

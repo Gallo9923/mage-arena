@@ -27,7 +27,7 @@ public class PlayerMovement implements Movement, Serializable {
 	/**
 	 * Moves the entity
 	 * 
-	 * @param Entity entity to move
+	 * @param entity to move
 	 */
 	public void move(Entity entity) {
 

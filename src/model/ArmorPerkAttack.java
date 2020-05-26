@@ -14,7 +14,7 @@ public class ArmorPerkAttack implements Attack, Serializable{
 	/**
 	 * Attack of the armor Item which
 	 * gives armor to the player
-	 * @param Entity entity entity that will perform the attack
+	 * @param entity entity that will perform the attack
 	 */
 	@Override
 	public void attack(Entity entity) {

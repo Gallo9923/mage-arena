@@ -99,7 +99,7 @@ public abstract class Entity implements Update, Serializable, Cloneable{
 	
 	/**
 	 * Returns the list of QuadTrees in which this entity belongs
-	 * @return ArrayList<QuadTree> The QuadTrees that this entity belongs
+	 * @return ArrayList The QuadTrees that this entity belongs
 	 */
 	public ArrayList<QuadTree> getQuadTrees() {
 		return quadTrees;

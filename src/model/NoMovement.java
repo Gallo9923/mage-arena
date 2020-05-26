@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class NoMovement implements Movement, Serializable{
+public class NoMovement implements Movement, Serializable {
 
 	private static final long serialVersionUID = -1416324783179318045L;
 
@@ -10,18 +10,19 @@ public class NoMovement implements Movement, Serializable{
 	 * Creates an instance of NoMovement
 	 */
 	public NoMovement() {
-		
+
 	}
-	
+
 	/**
 	 * Dont move the entity
-	 * @param Entity Entity to not move
+	 * 
+	 * @param entity Entity to not move
 	 */
 	@Override
 	public void move(Entity entity) {
-		
-		//Dont move
-		
+
+		// Dont move
+
 	}
 
 }

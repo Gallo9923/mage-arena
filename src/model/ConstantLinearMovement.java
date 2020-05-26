@@ -83,7 +83,7 @@ public class ConstantLinearMovement implements Movement, Serializable  {
 
 	/**
 	 * Updates the new x coordinate of the destiny point
-	 * @param double x2 the new x coordinate
+	 * @param x2 the new x coordinate
 	 */
 	public void setX2(double x2) {
 		this.x2 = x2;

@@ -72,7 +72,7 @@ public class QuadTree implements Serializable {
 	/**
 	 * Creates and instance of a QuadTree
 	 * 
-	 * @param level
+	 * @param level level of QuadTree
 	 * @param x Coordinate x of the QuadTree
 	 * @param y Coordinate y of the QuadTree
 	 * @param w Width of the QuadTree
@@ -97,7 +97,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the list of entities of the QuadTree
-	 * @return ArrayList<Entity> List of entities of the QuadTree
+	 * @return ArrayList List of entities of the QuadTree
 	 */
 	public ArrayList<Entity> getQTEntities() {
 		return QTentities;

@@ -25,7 +25,7 @@ public class FireballAttack implements Attack, Serializable{
 	
 	/**
 	 * Performs the attack
-	 * @param Entity entity to perform the attack
+	 * @param entity to perform the attack
 	 */
 	@Override
 	public void attack(Entity entity) {

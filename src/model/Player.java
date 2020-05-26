@@ -150,7 +150,7 @@ public class Player extends Entity implements Cloneable {
 	 * @param posY        the y coordinate of the entity
 	 * @param movement    The type of movement performed by the entity
 	 * @param attack      The type of attack performed by the entity
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public Player(GameManager gameManager, User user, AnimatedImage sprite, double posX, double posY, Movement movement,
 			Attack attack) throws FileNotFoundException {
@@ -186,7 +186,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Returns the list of all QuadTrees in Preorder
 	 * 
-	 * @return ArrayList<QuadTree> QuadTrees list
+	 * @return ArrayList QuadTrees list
 	 */
 	public ArrayList<QuadTree> preOrderQuadTree() {
 		return preOrderQuadTree(qt);
@@ -236,7 +236,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Game loop that updates the state of all entities
 	 * 
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public void updateEntities() throws FileNotFoundException {
 
@@ -462,7 +462,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Lose score of the match given an attack
 	 * 
-	 * @param attack
+	 * @param attack attack
 	 */
 	public void loseScore(Attack attack) {
 
@@ -477,7 +477,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Gain score of the match
 	 * 
-	 * @param entity
+	 * @param entity entity-
 	 */
 	public void gainScore(Entity entity) {
 		Attack attack = entity.getAttack();
@@ -513,7 +513,7 @@ public class Player extends Entity implements Cloneable {
 	 * Handles the event of a click and creates a new Spell
 	 * 
 	 * @param event Click Event
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
 
@@ -559,7 +559,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Returns the set of current active keys
 	 * 
-	 * @return HashSet<String> Set of current active keys
+	 * @return HashSet Set of current active keys
 	 */
 	public HashSet<String> getCurrentlyActiveKeys() {
 		return currentlyActiveKeys;
@@ -625,7 +625,7 @@ public class Player extends Entity implements Cloneable {
 	/**
 	 * Returns the list of all entities in the match
 	 * 
-	 * @return ArrayList<Entity> entities in the match
+	 * @return ArrayList entities in the match
 	 */
 	public ArrayList<Entity> getEntities() {
 		return entities;

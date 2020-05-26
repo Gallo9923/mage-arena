@@ -93,7 +93,7 @@ public class GameManager implements Serializable {
 	 * Determines if a user is Admin
 	 * 
 	 * @param username username of the user to be checked
-	 * @throws AccessDeniedException
+	 * @throws AccessDeniedException User does not have access
 	 */
 	public void isAdmin(String username) throws AccessDeniedException {
 
@@ -107,7 +107,7 @@ public class GameManager implements Serializable {
 	 * Returns the logs that have less or equals than the duration
 	 * 
 	 * @param duration duration
-	 * @return ArrayList<Log> list of logs
+	 * @return ArrayList list of logs
 	 */
 	public ArrayList<Log> logsBySessionTime(String duration) {
 
@@ -141,7 +141,7 @@ public class GameManager implements Serializable {
 	 * Returns the logs in a current date
 	 * 
 	 * @param date date
-	 * @return ArrayList<Log> list of logs
+	 * @return ArrayList list of logs
 	 */
 	public ArrayList<Log> logsByDate(String date) {
 
@@ -170,7 +170,7 @@ public class GameManager implements Serializable {
 	 * Returns the logs by a given username
 	 * 
 	 * @param username username
-	 * @return ArrayList<Log> list of logs
+	 * @return ArrayList list of logs
 	 */
 	public ArrayList<Log> logsByUsername(String username) {
 		ArrayList<Log> logs = (ArrayList<Log>) inOrderLogs();
@@ -193,7 +193,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Returns the list of logs in InOrder
 	 * 
-	 * @return List<Log> list of logs
+	 * @return List list of logs
 	 */
 	public List<Log> inOrderLogs() {
 		return inOrderLogs(logs);
@@ -281,7 +281,7 @@ public class GameManager implements Serializable {
 	 * Loads the game with a given savename
 	 * 
 	 * @param saveName name of the game
-	 * @throws SaveNotFoundException
+	 * @throws SaveNotFoundException Save not found
 	 */
 	public void loadGame(String saveName) throws SaveNotFoundException {
 		// TODO agregar match = game
@@ -298,7 +298,7 @@ public class GameManager implements Serializable {
 	 * 
 	 * @param saveName name of the game
 	 * @return Player Game
-	 * @throws SaveNotFoundException
+	 * @throws SaveNotFoundException Save not found
 	 */
 	public Player querySaves(String saveName) throws SaveNotFoundException {
 		// TODO
@@ -376,7 +376,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Returns the scores
 	 * 
-	 * @return ArrayList<Score> List of scores
+	 * @return ArrayList List of scores
 	 */
 	public ArrayList<Score> getScores() {
 
@@ -430,7 +430,7 @@ public class GameManager implements Serializable {
 	 * @param score    Score of the match
 	 * @param duration Duration of the match
 	 * @param date     Date of the match
-	 * @return
+	 * @return Score score
 	 */
 	public Score queryScore(User user, double score, long duration, LocalDate date) {
 
@@ -456,7 +456,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Returns the list of users in Preorder
 	 * 
-	 * @return List<User> list of users
+	 * @return List list of users
 	 */
 	public List<User> preOrderUser() {
 		return preOrderUser(users);
@@ -498,7 +498,7 @@ public class GameManager implements Serializable {
 	 * 
 	 * @param username username of the new user
 	 * @param password password of the new user
-	 * @throws UserAlreadyExistException
+	 * @throws UserAlreadyExistException User Already exist
 	 */
 	public void addUser(String username, String password) throws UserAlreadyExistException {
 
@@ -565,7 +565,7 @@ public class GameManager implements Serializable {
 	 * @param username username
 	 * @param password password
 	 * @return User user
-	 * @throws UserNotFoundException
+	 * @throws UserNotFoundException User not found
 	 */
 	public User queryUser(String username, String password) throws UserNotFoundException {
 
@@ -638,7 +638,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Creates a new match
 	 * 
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public void newMatch() throws FileNotFoundException {
 
@@ -649,7 +649,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Updates all entities of the match
 	 * 
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public void updateEntities() throws FileNotFoundException {
 		match.updateEntities();
@@ -669,7 +669,7 @@ public class GameManager implements Serializable {
 	 * Returns the sprite of a mage
 	 * 
 	 * @return AnimatedImage mage sprite
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public AnimatedImage mageSprite() throws FileNotFoundException {
 
@@ -694,7 +694,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Gets score of the current match
 	 * 
-	 * @return
+	 * @return double score
 	 */
 	public double getScore() {
 		return match.getScore();
@@ -703,8 +703,8 @@ public class GameManager implements Serializable {
 	/**
 	 * Handles a mouseClickEvent to the game
 	 * 
-	 * @param event
-	 * @throws FileNotFoundException
+	 * @param event event
+	 * @throws FileNotFoundException File not found
 	 */
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
 		match.mouseClickEvent(event);
@@ -713,7 +713,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Handles a KeyPressedEvent to the match
 	 * 
-	 * @param event
+	 * @param event event
 	 */
 	public void keyPressedEvent(KeyEvent event) {
 		match.keyPressedEvent(event);
@@ -723,7 +723,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Handles a KeyReleasedEvent to the match
 	 * 
-	 * @param event
+	 * @param event event
 	 */
 	public void keyReleasedEvent(KeyEvent event) {
 		// Check viability of method
@@ -779,7 +779,7 @@ public class GameManager implements Serializable {
 	 * Returns the list of saved matches given a User
 	 * 
 	 * @param user User
-	 * @return ArrayList<Player> List of saved matches
+	 * @return ArrayList List of saved matches
 	 */
 	public ArrayList<Player> getSaves(User user) {
 
@@ -800,7 +800,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Sets the the match
 	 * 
-	 * @param match
+	 * @param match match
 	 */
 	public void setMatch(Player match) {
 		this.match = match;

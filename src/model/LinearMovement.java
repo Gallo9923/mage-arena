@@ -39,7 +39,7 @@ public class LinearMovement implements Movement, Serializable {
 
 	/**
 	 * Moves the entity
-	 * @param Entity entity to move
+	 * @param entity to move
 	 */
 	@Override
 	public void move(Entity entity) {

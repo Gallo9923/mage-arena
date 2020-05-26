@@ -8,7 +8,7 @@ public interface MobFactory {
 	 * Creates a mob instance
 	 * @param entity Player
 	 * @return Mob instance of a mob
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException File not found
 	 */
 	public Mob createMob(Entity entity) throws FileNotFoundException;
 	
