@@ -5,40 +5,55 @@ import java.util.ArrayList;
 import model.Entity;
 import model.Mob;
 import model.Player;
+import model.QuadTree;
+import model.Spell;
 
-public class AttackSpellThread extends Thread {
-
+public class AttackSpellThread extends Thread{
+	
 	private Player player;
-	private ArrayList<Entity> entities;
-	private Entity curr;
+	private ArrayList<Spell> spells;
 	private int i;
 	private int j;
-
-	public AttackSpellThread(Player player, ArrayList<Entity> entities, Entity curr, int i, int j) {
-
+	
+	public AttackSpellThread(Player player, ArrayList<Spell> spells, int i, int j) {
 		this.player = player;
-		this.entities = entities;
-		this.curr = curr;
+		this.spells = spells;
 		this.i = i;
 		this.j = j;
 	}
-
+	
 	public void run() {
+		
+		for (int i = this.i; i< this.j && i < spells.size(); i++) {
 
-		for (int i = this.i; i < this.j && i < entities.size(); i++) {
+			Spell spell = spells.get(i);
+			ArrayList<QuadTree> currQTs = spell.getQuadTrees();
 
-			Entity aux = entities.get(i);
+			for (int j = 0; j < currQTs.size(); j++) {
 
-			if (i != j && aux instanceof Mob && curr.intersects(aux)) {
+				QuadTree quadTree = currQTs.get(j);
+				ArrayList<Entity> QTentities = quadTree.getQTEntities();
 
-				player.gainScore(curr);
-				curr.attack(aux);
-				// entities.remove(curr);
-				// i--;
-				player.addToRemove(curr);
+				for (int z = 0; z < QTentities.size(); z++) {
+
+					Entity auxEntity = QTentities.get(z);
+
+					if (spell.equals(auxEntity) == false && auxEntity instanceof Mob && spell.intersects(auxEntity)) {
+
+						player.gainScore(spell);
+						spell.attack(auxEntity);
+						
+						player.addToRemove(spell);
+						
+					}
+
+				}
 
 			}
 
 		}
+		
 	}
+	
+	
 }

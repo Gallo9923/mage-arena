@@ -47,16 +47,18 @@ public abstract class Entity implements Update, Serializable, Cloneable{
 		return quadTrees;
 	}
 	
+	@SuppressWarnings("unused")
 	public void render(GraphicsContext gc, double t) {
 		gc.drawImage(sprite.getFrame(t), posX, posY);
 		
-		//Debuggin Colisions
-		/*
-		gc.strokeLine(posX + offsetX,posY + offsetY, posX + offsetX + width, posY + offsetY);
-		gc.strokeLine(posX + offsetX,posY + offsetY, posX + offsetX, posY + offsetY + height);
-		gc.strokeLine(posX + offsetX + width,posY + offsetY, posX + offsetX + width, posY + offsetY + height);
-		gc.strokeLine(posX + offsetX,posY + offsetY + height, posX + offsetX + width, posY + offsetY + height);
-		*/
+		
+		if(GameManager.DEBUG_MODE == true) {
+			gc.strokeLine(posX + offsetX,posY + offsetY, posX + offsetX + width, posY + offsetY);
+			gc.strokeLine(posX + offsetX,posY + offsetY, posX + offsetX, posY + offsetY + height);
+			gc.strokeLine(posX + offsetX + width,posY + offsetY, posX + offsetX + width, posY + offsetY + height);
+			gc.strokeLine(posX + offsetX,posY + offsetY + height, posX + offsetX + width, posY + offsetY + height);
+		}
+	
 	}
 
 	public Rectangle2D getBoundary() {

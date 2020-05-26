@@ -17,6 +17,8 @@ import model.AnimatedImage;
 
 public class GameManager implements Serializable {
 
+	public static final boolean DEBUG_MODE = false;
+	
 	private static final long serialVersionUID = -7251619495947830479L;
 	private final double MAGE_WIDTH = 150;
 	private final double MAGE_HEIGHT = 150;

@@ -107,13 +107,9 @@ public class Main extends Application {
 				this.gameManager = gameManager;
 				ois.close();
 				
-				System.out.println("Loaded model");
-				
 			}else {
 				this.gameManager = new GameManager();
-				
-				System.out.println("Created model");
-				
+	
 			}
 
 		} catch (IOException e) {
@@ -135,6 +131,9 @@ public class Main extends Application {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch(Exception e) {
+			File file = new File(MODEL_PATH);
+			file.delete();
 		}
 	}
 

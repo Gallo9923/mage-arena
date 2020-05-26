@@ -4,12 +4,11 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import threads.AttackThread;
+import threads.AttackPlayerThread;
+import threads.AttackSpellThread;
 import threads.UpdateThread;
 
 public class Player extends Entity implements Cloneable {
@@ -49,6 +48,8 @@ public class Player extends Entity implements Cloneable {
 
 	private String saveName;
 
+	private int attackCounter;
+
 	public Player(GameManager gameManager, User user, AnimatedImage sprite, double posX, double posY, Movement movement,
 			Attack attack) throws FileNotFoundException {
 		super(sprite, posX, posY, 45, 54, 50, 45, movement, attack);
@@ -69,6 +70,7 @@ public class Player extends Entity implements Cloneable {
 		spells = new ArrayList<Spell>();
 		toRemove = new ArrayList<Entity>();
 		qt = null;
+		attackCounter = 0;
 
 		score = 0;
 		armor = 0;
@@ -122,18 +124,20 @@ public class Player extends Entity implements Cloneable {
 	public void updateEntities() throws FileNotFoundException {
 
 		if (paused == false && lose == false) {
+
+			attackCounter++;
+
 			updateChronometer();
 			createEntitiesLoop();
 
-			updateQuadTreeLoop();
-			attackLoopQuadTree();
-
-			// attackLoop();
-
-			// attackThreadLoop(); // Testing
+			if (attackCounter == 0) {
+				updateQuadTreeLoop();
+				attackLoop();
+			} else if (attackCounter == 10) {
+				attackCounter = -1;
+			}
 
 			removeEntitiesLoop();
-			// updateLoop();
 			updateThreadLoop();
 		}
 
@@ -151,69 +155,68 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
-	private void attackLoopQuadTree() {
+	private void attackPlayerThreadLoop() {
 
-		// Colission with Player of Mobs and Items
+		int numberOfThreads = this.getQuadTrees().size() / 2;
 
-		ArrayList<QuadTree> quadTrees = this.getQuadTrees();
+		AttackPlayerThread[] threads = new AttackPlayerThread[(int) numberOfThreads];
 
-		for (int i = 0; i < quadTrees.size(); i++) {
+		int intervals = (int) Math.ceil(entities.size() / (double) numberOfThreads);
 
-			QuadTree quadTree = quadTrees.get(i);
-			ArrayList<Entity> QTentities = quadTree.getQTEntities();
-
-			for (int j = 0; j < QTentities.size(); j++) {
-
-				Entity aux = QTentities.get(j);
-
-				if (this.equals(aux) == false && aux instanceof Mob && this.intersects(aux)) {
-					aux.attack(this);
-
-				} else if (this.equals(aux) == false && aux instanceof Item && this.intersects(aux)) {
-					aux.attack(this);
-					entities.remove(aux);
-					i--;
-				}
-			}
+		for (int i = 0; i < numberOfThreads; i++) {
+			threads[i] = new AttackPlayerThread(this, this.getQuadTrees(), i * intervals, (i + 1) * intervals);
 		}
 
-		// Colission of Spells with Mobs
-
-		for (int i = 0; i < spells.size(); i++) {
-
-			Spell spell = spells.get(i);
-			ArrayList<QuadTree> currQTs = spell.getQuadTrees();
-
-			for (int j = 0; j < currQTs.size(); j++) {
-
-				QuadTree quadTree = currQTs.get(j);
-				ArrayList<Entity> QTentities = quadTree.getQTEntities();
-
-				for (int z = 0; z < QTentities.size(); z++) {
-
-					Entity auxEntity = QTentities.get(z);
-
-					if (spell.equals(auxEntity) == false && auxEntity instanceof Mob && spell.intersects(auxEntity)) {
-
-						gainScore(spell);
-						spell.attack(auxEntity);
-						entities.remove(spell);
-						spells.remove(spell);
-						//i--;
-
-					}
-
-				}
-
-			}
-
+		for (int i = 0; i < numberOfThreads; i++) {
+			threads[i].start();
 		}
+
+		for (int i = 0; i < numberOfThreads; i++) {
+			try {
+
+				threads[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void attackSpellThreadLoop() {
+
+		int numberOfThreads = spells.size();
+
+		AttackSpellThread[] threads = new AttackSpellThread[(int) numberOfThreads];
+
+		int intervals = (int) Math.ceil(entities.size() / (double) numberOfThreads);
+
+		for (int i = 0; i < numberOfThreads; i++) {
+			threads[i] = new AttackSpellThread(this, spells, i * intervals, (i + 1) * intervals);
+		}
+
+		for (int i = 0; i < numberOfThreads; i++) {
+			threads[i].start();
+		}
+
+		for (int i = 0; i < numberOfThreads; i++) {
+			try {
+
+				threads[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void attackLoop() {
+
+		attackSpellThreadLoop();
+		attackPlayerThreadLoop();
 
 	}
 
 	private void updateThreadLoop() {
 
-		int numberOfThreads = entities.size();
+		int numberOfThreads = entities.size() / 2;
 
 		UpdateThread[] threads = new UpdateThread[(int) numberOfThreads];
 
@@ -238,39 +241,6 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
-	private void attackThreadLoop() {
-
-		int numberOfThreads = entities.size();
-
-		AttackThread[] threads = new AttackThread[(int) numberOfThreads];
-
-		int intervals = (int) Math.ceil(entities.size() / (double) numberOfThreads);
-
-		for (int i = 0; i < numberOfThreads; i++) {
-			threads[i] = new AttackThread(this, entities, i * intervals, (i + 1) * intervals);
-		}
-
-		for (int i = 0; i < numberOfThreads; i++) {
-			threads[i].start();
-		}
-
-		for (int i = 0; i < numberOfThreads; i++) {
-			try {
-
-				threads[i].join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		for (Entity entity : toRemove) {
-			entities.remove(entity);
-		}
-
-		toRemove.removeAll(toRemove);
-
-	}
-
 	private void updateChronometer() {
 		chronometer = System.currentTimeMillis() - t1 - pauseDuration;
 	}
@@ -292,6 +262,16 @@ public class Player extends Entity implements Cloneable {
 	}
 
 	private void removeEntitiesLoop() {
+
+		// Remove entities
+		for (Entity entity : toRemove) {
+
+			entities.remove(entity);
+
+			if (entity instanceof Spell) {
+				spells.remove(entity);
+			}
+		}
 
 		for (int i = 0; i < entities.size(); i++) {
 
@@ -327,56 +307,6 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
-	private void updateLoop() {
-		for (int i = 0; i < entities.size(); i++) {
-
-			Entity entity = entities.get(i);
-
-			if (entity instanceof RedSlime) {
-				RedSlime redSlime = (RedSlime) entity;
-				redSlime.setDestX(this.getPosX() + this.getWidth() / 2);
-				redSlime.setDestY(this.getPosY() + this.getHeight() / 2);
-				redSlime.update();
-
-			} else {
-				entities.get(i).update();
-			}
-
-		}
-	}
-
-	private void attackLoop() {
-
-		for (int i = 0; i < entities.size(); i++) {
-
-			Entity curr = entities.get(i);
-
-			if (curr instanceof Mob && curr.intersects(this)) {
-				curr.attack(this);
-
-			} else if (curr instanceof Spell) {
-
-				for (int j = 0; j < entities.size(); j++) {
-
-					Entity aux = entities.get(j);
-
-					if (i != j && aux instanceof Mob && curr.intersects(aux)) {
-
-						gainScore(curr);
-						curr.attack(aux);
-						entities.remove(curr);
-						i--;
-					}
-				}
-			} else if (curr instanceof Item && curr.intersects(this)) {
-				curr.attack(this);
-				entities.remove(curr);
-				i--;
-			}
-
-		}
-	}
-
 	public void loseScore(Attack attack) {
 
 		score -= attack.getDamage();
@@ -393,19 +323,21 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
+	@SuppressWarnings("unused")
 	public void renderEntities(GraphicsContext gc, double t) {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(gc, t);
 		}
 
-		// TODO
+		
+		if(GameManager.DEBUG_MODE == true) {
+			ArrayList<QuadTree> qts = preOrderQuadTree();
 
-		ArrayList<QuadTree> qts = preOrderQuadTree();
+			for (int i = 0; i < qts.size(); i++) {
+				QuadTree qt = qts.get(i);
+				qt.render(gc);
 
-		for (int i = 0; i < qts.size(); i++) {
-			QuadTree qt = qts.get(i);
-			qt.render(gc);
-
+			}
 		}
 
 	}
