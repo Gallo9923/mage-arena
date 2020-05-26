@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -23,6 +24,7 @@ public class Player extends Entity implements Cloneable {
 
 	private HashSet<String> currentlyActiveKeys;
 
+	private ArrayList<Spell> spells;
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> toRemove;
 	private double health;
@@ -63,7 +65,8 @@ public class Player extends Entity implements Cloneable {
 		entities.add(this);
 
 		maxMobs = 3;
-
+		
+		spells = new ArrayList<Spell>();
 		toRemove = new ArrayList<Entity>();
 		qt = null;
 		
@@ -77,6 +80,46 @@ public class Player extends Entity implements Cloneable {
 
 	}
 
+	public ArrayList<QuadTree> preOrderQuadTree() {
+		return preOrderQuadTree(qt);
+	}
+
+	private ArrayList<QuadTree> preOrderQuadTree(QuadTree e) {
+
+		ArrayList<QuadTree> list = new ArrayList<QuadTree>();
+
+		// Base step doesnt do anything
+		// Recursive step
+		if (e != null) {
+
+			list.add(e);
+
+			QuadTree northEast = e.getNorthEast();
+			QuadTree northWest = e.getNorthWest();
+			QuadTree southEast = e.getSouthEast();
+			QuadTree southWest = e.getSouthWest();
+			
+			if (northEast != null) {
+				list.addAll(preOrderQuadTree(northEast));
+			}
+
+			if (northWest != null) {
+				list.addAll(preOrderQuadTree(northWest));
+			}
+
+			if (southEast != null) {
+				list.addAll(preOrderQuadTree(southEast));
+			}
+			
+			if (southWest != null) {
+				list.addAll(preOrderQuadTree(southWest));
+			}
+			
+			
+		}
+		return list;
+	}
+	
 	public void updateEntities() throws FileNotFoundException {
 
 		if (paused == false && lose == false) {
@@ -100,7 +143,7 @@ public class Player extends Entity implements Cloneable {
 
 	private void updateQuadTreeLoop() {
 		
-		qt = new QuadTree(0, 0, 1280, 720);
+		qt = new QuadTree(0, 0, 0, 1280, 720);
 		
 		for(int i=0; i<entities.size(); i++) {
 			Entity entity = entities.get(i);
@@ -112,10 +155,17 @@ public class Player extends Entity implements Cloneable {
 	
 	private void attackLoopQuadTree() {
 
+		
+		ArrayList<QuadTree> quadTree = this.getQuadTrees();
+		
+		
 		for (int i = 0; i < entities.size(); i++) {
 
 			Entity curr = entities.get(i);
-
+				
+			
+			
+			
 			if (curr instanceof Mob && curr.intersects(this)) {
 				curr.attack(this);
 
@@ -137,6 +187,7 @@ public class Player extends Entity implements Cloneable {
 							gainScore(curr);
 							curr.attack(auxEntity);
 							entities.remove(curr);
+							spells.remove(curr);
 							i--;
 						
 						}
@@ -341,6 +392,18 @@ public class Player extends Entity implements Cloneable {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(gc, t);
 		}
+		
+		//TODO
+		
+		ArrayList<QuadTree> qts = preOrderQuadTree();
+		
+		for(int i=0; i<qts.size(); i++) {
+			QuadTree qt = qts.get(i);
+			qt.render(gc);
+			
+		}
+		
+		
 	}
 
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
@@ -354,6 +417,7 @@ public class Player extends Entity implements Cloneable {
 
 			Fireball fb = (Fireball) FireballFactory.getInstance().createSpell(this, clickX, clickY);
 			entities.add(fb);
+			spells.add(fb);
 		}
 
 	}
