@@ -66,8 +66,6 @@ public class QuadTree implements Serializable {
 	}
 
 	public void insert(Entity entity) {
-
-		System.out.println(level);
 		
 		Rectangle2D region = new Rectangle2D(x, y, w, h);
 

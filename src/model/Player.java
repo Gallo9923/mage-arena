@@ -44,7 +44,7 @@ public class Player extends Entity implements Cloneable {
 	private long pauseTime2;
 
 	private QuadTree qt;
-	
+
 	private int maxMobs = 3;
 
 	private String saveName;
@@ -65,11 +65,11 @@ public class Player extends Entity implements Cloneable {
 		entities.add(this);
 
 		maxMobs = 3;
-		
+
 		spells = new ArrayList<Spell>();
 		toRemove = new ArrayList<Entity>();
 		qt = null;
-		
+
 		score = 0;
 		armor = 0;
 		paused = false;
@@ -98,7 +98,7 @@ public class Player extends Entity implements Cloneable {
 			QuadTree northWest = e.getNorthWest();
 			QuadTree southEast = e.getSouthEast();
 			QuadTree southWest = e.getSouthWest();
-			
+
 			if (northEast != null) {
 				list.addAll(preOrderQuadTree(northEast));
 			}
@@ -110,103 +110,107 @@ public class Player extends Entity implements Cloneable {
 			if (southEast != null) {
 				list.addAll(preOrderQuadTree(southEast));
 			}
-			
+
 			if (southWest != null) {
 				list.addAll(preOrderQuadTree(southWest));
 			}
-			
-			
+
 		}
 		return list;
 	}
-	
+
 	public void updateEntities() throws FileNotFoundException {
 
 		if (paused == false && lose == false) {
 			updateChronometer();
 			createEntitiesLoop();
-			
+
 			updateQuadTreeLoop();
 			attackLoopQuadTree();
-			
+
 			// attackLoop();
-			
-			//attackThreadLoop(); // Testing
-			
-			
+
+			// attackThreadLoop(); // Testing
+
 			removeEntitiesLoop();
-			//updateLoop();
+			// updateLoop();
 			updateThreadLoop();
 		}
 
 	}
 
 	private void updateQuadTreeLoop() {
-		
+
 		qt = new QuadTree(0, 0, 0, 1280, 720);
-		
-		for(int i=0; i<entities.size(); i++) {
+
+		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = entities.get(i);
 			entity.resetQuadTree();
 			qt.insert(entity);
 		}
-		
+
 	}
-	
+
 	private void attackLoopQuadTree() {
 
-		
-		ArrayList<QuadTree> quadTree = this.getQuadTrees();
-		
-		
-		for (int i = 0; i < entities.size(); i++) {
+		// Colission with Player of Mobs and Items
 
-			Entity curr = entities.get(i);
-				
-			
-			
-			
-			if (curr instanceof Mob && curr.intersects(this)) {
-				curr.attack(this);
+		ArrayList<QuadTree> quadTrees = this.getQuadTrees();
 
-			} else if (curr instanceof Spell) {
+		for (int i = 0; i < quadTrees.size(); i++) {
 
-				ArrayList<QuadTree> currQTs = curr.getQuadTrees();
-				
-				for(int j=0; j<currQTs.size(); j++) {
-					
-					QuadTree qt = currQTs.get(j);
-					ArrayList<Entity> QTentities = qt.getQTEntities();
-					
-					for(int z=0; z<QTentities.size(); z++) {
-						
-						Entity auxEntity = QTentities.get(z);
-						
-						if(curr.equals(auxEntity) == false && auxEntity instanceof Mob && curr.intersects(auxEntity)) {
-							
-							gainScore(curr);
-							curr.attack(auxEntity);
-							entities.remove(curr);
-							spells.remove(curr);
-							i--;
-						
-						}
-						
-					}
-					
-					
+			QuadTree quadTree = quadTrees.get(i);
+			ArrayList<Entity> QTentities = quadTree.getQTEntities();
+
+			for (int j = 0; j < QTentities.size(); j++) {
+
+				Entity aux = QTentities.get(j);
+
+				if (this.equals(aux) == false && aux instanceof Mob && this.intersects(aux)) {
+					aux.attack(this);
+
+				} else if (this.equals(aux) == false && aux instanceof Item && this.intersects(aux)) {
+					aux.attack(this);
+					entities.remove(aux);
+					i--;
 				}
-				
-				
-			} else if (curr instanceof Item && curr.intersects(this)) {
-				curr.attack(this);
-				entities.remove(curr);
-				i--;
+			}
+		}
+
+		// Colission of Spells with Mobs
+
+		for (int i = 0; i < spells.size(); i++) {
+
+			Spell spell = spells.get(i);
+			ArrayList<QuadTree> currQTs = spell.getQuadTrees();
+
+			for (int j = 0; j < currQTs.size(); j++) {
+
+				QuadTree quadTree = currQTs.get(j);
+				ArrayList<Entity> QTentities = quadTree.getQTEntities();
+
+				for (int z = 0; z < QTentities.size(); z++) {
+
+					Entity auxEntity = QTentities.get(z);
+
+					if (spell.equals(auxEntity) == false && auxEntity instanceof Mob && spell.intersects(auxEntity)) {
+
+						gainScore(spell);
+						spell.attack(auxEntity);
+						entities.remove(spell);
+						spells.remove(spell);
+						//i--;
+
+					}
+
+				}
+
 			}
 
 		}
+
 	}
-	
+
 	private void updateThreadLoop() {
 
 		int numberOfThreads = entities.size();
@@ -306,6 +310,7 @@ public class Player extends Entity implements Cloneable {
 				i = i - 1;
 			} else if (entity instanceof Spell && ((Spell) entity).intersectsWall()) {
 				entities.remove(i);
+				spells.remove(entity);
 				i = i - 1;
 			}
 
@@ -392,18 +397,17 @@ public class Player extends Entity implements Cloneable {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(gc, t);
 		}
-		
-		//TODO
-		
+
+		// TODO
+
 		ArrayList<QuadTree> qts = preOrderQuadTree();
-		
-		for(int i=0; i<qts.size(); i++) {
+
+		for (int i = 0; i < qts.size(); i++) {
 			QuadTree qt = qts.get(i);
 			qt.render(gc);
-			
+
 		}
-		
-		
+
 	}
 
 	public void mouseClickEvent(MouseEvent event) throws FileNotFoundException {
