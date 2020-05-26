@@ -22,7 +22,7 @@ public class GameManager implements Serializable {
 	/**
 	 * Determines if Debug Mode is turned on
 	 */
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 
 	/**
 	 * width of the mage
@@ -301,7 +301,7 @@ public class GameManager implements Serializable {
 	 * @throws SaveNotFoundException Save not found
 	 */
 	public Player querySaves(String saveName) throws SaveNotFoundException {
-		// TODO
+		
 		boolean found = false;
 		Player curr = null;
 

@@ -462,8 +462,6 @@ public class GUIController {
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 
-		// TODO REMOVE WHEN FINISH
-		setSceneMenu(event);
 
 		String un = username.getText();
 		String pass = password.getText();

@@ -65,6 +65,7 @@ public class Main extends Application {
 		primaryStage.setTitle("Mage Arena");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setResizable(false);
 
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
@@ -126,8 +127,6 @@ public class Main extends Application {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(MODEL_PATH)));
 			oos.writeObject(gameManager);
 			oos.close();
-
-			System.out.println("Serialized model");
 
 		} catch (IOException e) {
 			e.printStackTrace();
