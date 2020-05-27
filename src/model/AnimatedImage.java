@@ -31,7 +31,7 @@ public class AnimatedImage implements Serializable {
 	 * Constructs an AnimatedImage in charge of displaying the movement animations
 	 * of each entity
 	 * 
-	 * @param frames Path of each image for the animation
+	 * @param frames   Path of each image for the animation
 	 * @param duration The duration of each frame in ms
 	 * @param width    The width of the image to be loaded
 	 * @param height   The height of the image to be loaded

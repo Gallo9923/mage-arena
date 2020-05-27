@@ -146,14 +146,16 @@ public class Log implements Serializable {
 
 	/**
 	 * Returns the username of the User
+	 * 
 	 * @return String username
 	 */
 	public String getUsername() {
 		return user.getUsername();
 	}
-	
+
 	/**
 	 * Returns the formatted session time mm:ss
+	 * 
 	 * @return String formatted session time
 	 */
 	public String getFormattedSessionTime() {

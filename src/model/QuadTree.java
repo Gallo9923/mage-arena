@@ -73,11 +73,11 @@ public class QuadTree implements Serializable {
 	 * Creates and instance of a QuadTree
 	 * 
 	 * @param level level of QuadTree
-	 * @param x Coordinate x of the QuadTree
-	 * @param y Coordinate y of the QuadTree
-	 * @param w Width of the QuadTree
-	 * @param h Height of the QuadTree
-	 */ 
+	 * @param x     Coordinate x of the QuadTree
+	 * @param y     Coordinate y of the QuadTree
+	 * @param w     Width of the QuadTree
+	 * @param h     Height of the QuadTree
+	 */
 	public QuadTree(int level, double x, double y, double w, double h) {
 
 		this.northEast = null;
@@ -97,13 +97,13 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the list of entities of the QuadTree
+	 * 
 	 * @return ArrayList List of entities of the QuadTree
 	 */
 	public ArrayList<Entity> getQTEntities() {
 		return QTentities;
 	}
 
-	
 	/**
 	 * Subdivides the current QuadTree in other four smaller QuadTrees
 	 */
@@ -127,6 +127,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Inserts an entity to the QuadTree recursively
+	 * 
 	 * @param entity Entity to be inserted
 	 */
 	public void insert(Entity entity) {
@@ -163,6 +164,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Determines if a entity is contained in a QuadTree
+	 * 
 	 * @param entity Entity to be checked
 	 * @return True if the entity is contained in the QuadTree
 	 */
@@ -175,6 +177,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Renders the QuadTree delimitations or borders
+	 * 
 	 * @param gc GraphicsContext
 	 */
 	public void render(GraphicsContext gc) {
@@ -188,6 +191,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the northEast QuadTree
+	 * 
 	 * @return QuadTree
 	 */
 	public QuadTree getNorthEast() {
@@ -196,6 +200,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the northWest QuadTree
+	 * 
 	 * @return QuadTree
 	 */
 	public QuadTree getNorthWest() {
@@ -204,6 +209,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the southEast QuadTree
+	 * 
 	 * @return QuadTree
 	 */
 	public QuadTree getSouthEast() {
@@ -212,6 +218,7 @@ public class QuadTree implements Serializable {
 
 	/**
 	 * Returns the southWest QuadTree
+	 * 
 	 * @return QuadTree
 	 */
 	public QuadTree getSouthWest() {

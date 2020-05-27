@@ -301,7 +301,7 @@ public class GameManager implements Serializable {
 	 * @throws SaveNotFoundException Save not found
 	 */
 	public Player querySaves(String saveName) throws SaveNotFoundException {
-		
+
 		boolean found = false;
 		Player curr = null;
 

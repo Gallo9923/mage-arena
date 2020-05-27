@@ -8,23 +8,49 @@ import model.Player;
 import model.QuadTree;
 import model.Spell;
 
-public class AttackSpellThread extends Thread{
-	
+public class AttackSpellThread extends Thread {
+
+	/**
+	 * The current match
+	 */
 	private Player player;
+
+	/**
+	 * List of spells
+	 */
 	private ArrayList<Spell> spells;
+
+	/**
+	 * Starting index to run inclusive
+	 */
 	private int i;
+
+	/**
+	 * End index to run exclusive
+	 */
 	private int j;
-	
+
+	/**
+	 * Creates an instance of AttackSpellThread
+	 * 
+	 * @param player current match
+	 * @param spells List of spells
+	 * @param i      Starting index to run inclusive
+	 * @param j      End index to run exclusive
+	 */
 	public AttackSpellThread(Player player, ArrayList<Spell> spells, int i, int j) {
 		this.player = player;
 		this.spells = spells;
 		this.i = i;
 		this.j = j;
 	}
-	
+
+	/**
+	 * Performs all the spells attack
+	 */
 	public void run() {
-		
-		for (int i = this.i; i< this.j && i < spells.size(); i++) {
+
+		for (int i = this.i; i < this.j && i < spells.size(); i++) {
 
 			Spell spell = spells.get(i);
 			ArrayList<QuadTree> currQTs = spell.getQuadTrees();
@@ -42,9 +68,9 @@ public class AttackSpellThread extends Thread{
 
 						player.gainScore(spell);
 						spell.attack(auxEntity);
-						
+
 						player.addToRemove(spell);
-						
+
 					}
 
 				}
@@ -52,8 +78,7 @@ public class AttackSpellThread extends Thread{
 			}
 
 		}
-		
+
 	}
-	
-	
+
 }

@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class NoAttack implements Attack, Serializable{
+public class NoAttack implements Attack, Serializable {
 
 	private static final long serialVersionUID = 2435008620019760355L;
 
@@ -10,17 +10,17 @@ public class NoAttack implements Attack, Serializable{
 	 * Creates an instance of NoAttack
 	 */
 	public NoAttack() {
-		
+
 	}
-	
+
 	/**
 	 * No attack
-	 * @param entity  entity to attack
+	 * 
+	 * @param entity entity to attack
 	 */
 	@Override
 	public void attack(Entity entity) {
-		
-		
+
 	}
 
 	/**

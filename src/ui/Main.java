@@ -30,9 +30,19 @@ public class Main extends Application {
 	public static final String SCORES_PATH = "data" + File.separator + "scores.sav";
 	public static final String MODEL_PATH = "data" + File.separator + "model.sav";
 
+	/**
+	 * GameManager
+	 */
 	private GameManager gameManager;
+
+	/**
+	 * GUIController
+	 */
 	private GUIController controller;
 
+	/**
+	 * Creates an instance of Main
+	 */
 	public Main() {
 
 		loadModel();
@@ -47,8 +57,7 @@ public class Main extends Application {
 	}
 
 	@Override
-	public void 
-	start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
 
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainPane.fxml"));
 		fxmlLoader.setController(controller);
@@ -72,21 +81,18 @@ public class Main extends Application {
 			@Override
 			public void handle(WindowEvent event) {
 				try {
-					
-					//TODO Add log
-					if(gameManager.getSessionStart() != -1) {
+
+					// TODO Add log
+					if (gameManager.getSessionStart() != -1) {
 						gameManager.addLog();
 					}
-				
-					//TODO reset session start
+
+					// TODO reset session start
 					gameManager.resetSessionStart();
-					
-					
+
 					serializeScore();
 					serializeModel();
-					
-		
-					
+
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -95,6 +101,9 @@ public class Main extends Application {
 
 	}
 
+	/**
+	 * Loads a serialized model
+	 */
 	public void loadModel() {
 
 		try {
@@ -107,35 +116,41 @@ public class Main extends Application {
 				GameManager gameManager = (GameManager) ois.readObject();
 				this.gameManager = gameManager;
 				ois.close();
-				
-			}else {
+
+			} else {
 				this.gameManager = new GameManager();
-	
+
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			
-		}catch (ClassNotFoundException e){
+
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Serializes the model
+	 */
 	public void serializeModel() {
 		try {
-			
+
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(MODEL_PATH)));
 			oos.writeObject(gameManager);
 			oos.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			File file = new File(MODEL_PATH);
 			file.delete();
 		}
 	}
 
+	/**
+	 * Loads the scores
+	 */
 	public void loadScore() {
 
 		try {
@@ -180,6 +195,11 @@ public class Main extends Application {
 
 	}
 
+	/**
+	 * Serializes the scores
+	 * 
+	 * @throws FileNotFoundException file not found
+	 */
 	public void serializeScore() throws FileNotFoundException {
 
 		PrintWriter pw = new PrintWriter(new File(SCORES_PATH));

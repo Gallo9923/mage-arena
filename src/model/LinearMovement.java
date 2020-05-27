@@ -5,17 +5,17 @@ import java.io.Serializable;
 public class LinearMovement implements Movement, Serializable {
 
 	private static final long serialVersionUID = -5898935576608943621L;
-	
+
 	/**
 	 * Speed in x coordinate
 	 */
 	private double moveX;
-	
+
 	/**
 	 * Speed in y coordinate
 	 */
 	private double moveY;
-	
+
 	/**
 	 * Modifier of speed
 	 */
@@ -23,11 +23,12 @@ public class LinearMovement implements Movement, Serializable {
 
 	/**
 	 * Creates an instance of LinearMovement
+	 * 
 	 * @param originX x1 coordinate of origin movement
 	 * @param originY y1 coordinate of origin movement
-	 * @param clickX x2 coordinate of the destiny
-	 * @param clickY y2 coordinate of the destiny
-	 * @param speed Modifier of speed
+	 * @param clickX  x2 coordinate of the destiny
+	 * @param clickY  y2 coordinate of the destiny
+	 * @param speed   Modifier of speed
 	 */
 	public LinearMovement(double originX, double originY, double clickX, double clickY, double speed) {
 
@@ -39,6 +40,7 @@ public class LinearMovement implements Movement, Serializable {
 
 	/**
 	 * Moves the entity
+	 * 
 	 * @param entity to move
 	 */
 	@Override

@@ -11,6 +11,7 @@ public interface Attack {
 
 	/**
 	 * The amount of damage dealt by the attack
+	 * 
 	 * @return double damage dealt
 	 */
 	public double getDamage();

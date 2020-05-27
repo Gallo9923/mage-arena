@@ -497,7 +497,7 @@ public class Player extends Entity implements Cloneable {
 			entities.get(i).render(gc, t);
 		}
 
-		if (GameManager.DEBUG_MODE == true) {
+		if (GameManager.DEBUG_MODE) {
 			ArrayList<QuadTree> qts = preOrderQuadTree();
 
 			for (int i = 0; i < qts.size(); i++) {

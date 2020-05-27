@@ -2,9 +2,8 @@ package model;
 
 import java.io.FileNotFoundException;
 
-
 public class FireballFactory implements SpellsFactory {
-	
+
 	/**
 	 * Instance of the Factory
 	 */
@@ -19,6 +18,7 @@ public class FireballFactory implements SpellsFactory {
 
 	/**
 	 * Returns the instance of the factory
+	 * 
 	 * @return FireballFactory instance of the factory
 	 */
 	public static FireballFactory getInstance() {
@@ -32,7 +32,8 @@ public class FireballFactory implements SpellsFactory {
 
 	/**
 	 * Creates an instance of a Spell
-	 *@return Spell spell
+	 * 
+	 * @return Spell spell
 	 */
 	@Override
 	public Spell createSpell(Entity entity, double clickX, double clickY) throws FileNotFoundException {
@@ -52,8 +53,9 @@ public class FireballFactory implements SpellsFactory {
 
 	/**
 	 * Returns the fireball sprite
+	 * 
 	 * @return AnimatedImage sprite of the fireball
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	private AnimatedImage fireballSprite() throws FileNotFoundException {
 

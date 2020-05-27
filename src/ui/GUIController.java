@@ -50,14 +50,15 @@ import model.User;
 
 public class GUIController {
 
+	/**
+	 * Gamemanager of the application
+	 */
 	private GameManager gameManager;
+
+	/**
+	 * Main of the application
+	 */
 	private Main main;
-
-	@FXML
-	private TextField username;
-
-	@FXML
-	private PasswordField password;
 
 	@FXML
 	private BorderPane mainPane;
@@ -66,13 +67,19 @@ public class GUIController {
 	private Canvas canvas;
 
 	@FXML
+	private StackPane arenaMainStackPane;
+
+	@FXML
 	private StackPane pauseMenu;
 
 	@FXML
-	private StackPane lostMenu;
+	private TextField username;
 
 	@FXML
-	private StackPane arenaMainStackPane;
+	private PasswordField password;
+
+	@FXML
+	private StackPane lostMenu;
 
 	@FXML
 	private ProgressBar playerHealth;
@@ -139,13 +146,25 @@ public class GUIController {
 	@FXML
 	private TableColumn<Log, String> timeLogsColumn;
 
+	/**
+	 * Creates an instance of GUIController
+	 * 
+	 * @param gm   gamemanager
+	 * @param main main
+	 */
 	public GUIController(GameManager gm, Main main) {
 		this.gameManager = gm;
 		this.main = main;
 	}
 
+	/**
+	 * Loads a saved game
+	 * 
+	 * @param event event
+	 * @throws IOException Loading file
+	 */
 	@FXML
-	void loadGame(ActionEvent event) throws IOException {
+	public void loadGame(ActionEvent event) throws IOException {
 
 		String saveGameSTR = saveNameLabel.getText();
 
@@ -217,6 +236,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Displays the scores sorted by date
+	 * 
+	 * @param event event
+	 */
 	@FXML
 	public void displaySortedByDate(ActionEvent event) {
 		ArrayList<Score> scores = gameManager.getScores();
@@ -226,6 +250,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Displays sscores sorted by score
+	 * 
+	 * @param event event
+	 */
 	@FXML
 	public void displaySortedByScore(ActionEvent event) {
 		ArrayList<Score> scores = gameManager.getScores();
@@ -235,6 +264,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Initialized the score table
+	 * 
+	 * @param scores scores
+	 */
 	public void initializeScoreTable(ArrayList<Score> scores) {
 		ObservableList<Score> scoresOL = FXCollections.observableArrayList(scores);
 		scoreboardTable.setItems(scoresOL);
@@ -252,11 +286,19 @@ public class GUIController {
 		dateColumn.setStyle("-fx-alignment: CENTER");
 	}
 
+	/**
+	 * Displays the loaded games
+	 */
 	public void displayLoadGames() {
 		ArrayList<Player> saves = gameManager.getSaves(gameManager.getCurrentUser());
 		initializeLoadGamesTable(saves);
 	}
 
+	/**
+	 * Initializes the load Games Table
+	 * 
+	 * @param saves saves
+	 */
 	public void initializeLoadGamesTable(ArrayList<Player> saves) {
 		ObservableList<Player> savesOL = FXCollections.observableArrayList(saves);
 		loadGamesTable.setItems(savesOL);
@@ -271,6 +313,11 @@ public class GUIController {
 		gameTimeColumn.setStyle("-fx-alignment: CENTER");
 	}
 
+	/**
+	 * Save the game
+	 * 
+	 * @param event event
+	 */
 	@FXML
 	void saveGame(ActionEvent event) {
 
@@ -280,6 +327,12 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Sets the scene to a new game
+	 * 
+	 * @param event event
+	 * @throws IOException Save problem
+	 */
 	@FXML
 	private void setSceneNewGame(ActionEvent event) throws IOException {
 
@@ -341,6 +394,9 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Checks if the match has ended
+	 */
 	public void matchEndedCheckLoop() {
 
 		if (gameManager.isLose()) {
@@ -349,6 +405,9 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Sets the scene to lose
+	 */
 	public void setSceneLose() {
 
 		lostMenu.setVisible(true);
@@ -357,6 +416,9 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Updates the chronometer of the game
+	 */
 	public void updateChronometer() {
 
 		long duration = gameManager.getMatch().getChronometer();
@@ -369,6 +431,9 @@ public class GUIController {
 		chronometer.setText(sMin + ":" + sSec);
 	}
 
+	/**
+	 * Updates the player health bar
+	 */
 	public void updatePlayerHealthBar() {
 
 		double health = gameManager.getMatch().getHealth();
@@ -376,15 +441,29 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Updates de score of the match
+	 */
 	public void updateScore() {
 		double scoreValue = gameManager.getScore();
 		score.setText(scoreValue + "");
 	}
 
+	/**
+	 * Update entities of the match
+	 * 
+	 * @throws FileNotFoundException file not found
+	 */
 	public void updateEntities() throws FileNotFoundException {
 		gameManager.updateEntities();
 	}
 
+	/**
+	 * Renders the entitites of the match
+	 * 
+	 * @param gc GraphicsContext
+	 * @param t  time
+	 */
 	public void renderEntities(GraphicsContext gc, double t) {
 		updateChronometer();
 		updatePlayerHealthBar();
@@ -393,11 +472,17 @@ public class GUIController {
 		gameManager.renderEntities(gc, t);
 	}
 
+	/**
+	 * Updated the player armor bar
+	 */
 	public void updatePlayerArmorBar() {
 		double armor = gameManager.getMatch().getArmor();
 		playerArmor.setProgress(armor / Player.MAX_ARMOR);
 	}
 
+	/**
+	 * Initializes the action handlers of the game
+	 */
 	private void initializeActionHandlers() {
 
 		arenaMainStackPane.requestFocus();
@@ -437,6 +522,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Registers a new user
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void register(ActionEvent event) {
 		String un = username.getText();
@@ -459,9 +549,14 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Logins an user
+	 * 
+	 * @param event event
+	 * @throws IOException IOException
+	 */
 	@FXML
 	private void login(ActionEvent event) throws IOException {
-
 
 		String un = username.getText();
 		String pass = password.getText();
@@ -489,6 +584,9 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Saved Sucessfuly window
+	 */
 	public void savedSucessfully() {
 		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 		Alert alert = new Alert(AlertType.INFORMATION, "The match has been saved successfuly", ok);
@@ -497,6 +595,11 @@ public class GUIController {
 		alert.showAndWait();
 	}
 
+	/**
+	 * User already exist window
+	 * 
+	 * @param msg msg
+	 */
 	public void userAlreadyExist(String msg) {
 		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 		Alert alert = new Alert(AlertType.INFORMATION, "User " + msg + " Already exist. Choose another one.", ok);
@@ -505,6 +608,11 @@ public class GUIController {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Incorrect user window
+	 * 
+	 * @param msg msg
+	 */
 	public void incorrectUser(String msg) {
 		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 		Alert alert = new Alert(AlertType.INFORMATION, "User " + msg + " not found", ok);
@@ -513,6 +621,9 @@ public class GUIController {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Invalid form window
+	 */
 	public void invalidForm() {
 		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 		Alert alert = new Alert(AlertType.INFORMATION,
@@ -522,6 +633,11 @@ public class GUIController {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Resumes the current game
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void resumeGame(ActionEvent event) {
 		pauseMenu.setVisible(false);
@@ -530,6 +646,11 @@ public class GUIController {
 		arenaMainStackPane.requestFocus();
 	}
 
+	/**
+	 * Handles a key pressed
+	 * 
+	 * @param event
+	 */
 	void keyPressed(KeyEvent event) {
 
 		if (event.getCode().toString().equals("ESCAPE") && pauseMenu.isVisible()) {
@@ -540,6 +661,12 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Sets the scene of logs
+	 * 
+	 * @param event event
+	 * @throws IOException IOException
+	 */
 	@FXML
 	private void setSceneLogs(ActionEvent event) throws IOException {
 
@@ -550,7 +677,6 @@ public class GUIController {
 			fxmlLoader2.setController(this);
 			StackPane stackPane = fxmlLoader2.load();
 
-			// TODO initializeTableView
 			displayLogs();
 
 			mainPane.setCenter(stackPane);
@@ -561,6 +687,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Access denied window
+	 * 
+	 * @param username username
+	 */
 	private void accessDenied(String username) {
 		ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
 		Alert alert = new Alert(AlertType.INFORMATION, "The user" + username + " does not have access", ok);
@@ -568,17 +699,24 @@ public class GUIController {
 		alert.setHeaderText("Warning");
 		alert.showAndWait();
 	}
-	
+
+	/**
+	 * Displays the logs in the table
+	 */
 	private void displayLogs() {
-		// TODO initialize TableView
 
 		ArrayList<Log> logs = (ArrayList<Log>) gameManager.inOrderLogs();
 		initializeLogsTable(logs);
 
 	}
 
+	/**
+	 * Displays the logs by date
+	 * 
+	 * @param event event
+	 */
 	@FXML
-	void displayLogsByDate(ActionEvent event) {
+	public void displayLogsByDate(ActionEvent event) {
 
 		try {
 			String date = logsLabel.getText();
@@ -590,8 +728,14 @@ public class GUIController {
 
 	}
 
+	/**
+	 * displays the logs by session time
+	 * 
+	 * @param event event
+	 * 
+	 */
 	@FXML
-	void displayLogsBySessionTime(ActionEvent event) {
+	public void displayLogsBySessionTime(ActionEvent event) {
 		try {
 			String duration = logsLabel.getText();
 
@@ -607,6 +751,11 @@ public class GUIController {
 		}
 	}
 
+	/**
+	 * display the logs by Username
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void displayLogsByUsername(ActionEvent event) {
 
@@ -616,6 +765,11 @@ public class GUIController {
 
 	}
 
+	/**
+	 * initializes the logs Table
+	 * 
+	 * @param logs logs list
+	 */
 	private void initializeLogsTable(ArrayList<Log> logs) {
 
 		ObservableList<Log> logsOL = FXCollections.observableArrayList(logs);
@@ -633,15 +787,22 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Closes the application
+	 * 
+	 * @param event event
+	 * @throws FileNotFoundException file not found
+	 */
 	@FXML
 	private void closeApplication(ActionEvent event) throws FileNotFoundException {
 
-		// TODO Add log
+		// Add log
 		gameManager.addLog();
 
-		// TODO reset session start
+		// reset session start
 		gameManager.resetSessionStart();
 
+		// Serialize information
 		main.serializeScore();
 		main.serializeModel();
 
@@ -649,6 +810,12 @@ public class GUIController {
 		stage.close();
 	}
 
+	/**
+	 * Sets the scene to load game
+	 * 
+	 * @param event event
+	 * @throws IOException IOException
+	 */
 	@FXML
 	private void setSceneLoadGame(ActionEvent event) throws IOException {
 
@@ -662,6 +829,12 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Sets Scene to scoreboard
+	 * 
+	 * @param event event
+	 * @throws IOException IOException
+	 */
 	@FXML
 	private void setSceneScoreboard(ActionEvent event) throws IOException {
 
@@ -674,9 +847,16 @@ public class GUIController {
 		mainPane.setCenter(stackPane);
 	}
 
+	/**
+	 * Sets the Scene Menu
+	 * 
+	 * @param event event
+	 * @throws IOException IOException
+	 */
 	@FXML
 	private void setSceneMenu(ActionEvent event) throws IOException {
-		// TODO Sesion Time
+
+		// Sesion Time
 
 		FXMLLoader fxmlLoader2 = new FXMLLoader(getClass().getResource("Menu.fxml"));
 		fxmlLoader2.setController(this);
@@ -696,6 +876,12 @@ public class GUIController {
 
 	}
 
+	/**
+	 * Queries a user by username
+	 * 
+	 * @param username username
+	 * @return User user
+	 */
 	public User queryUser(String username) {
 		return gameManager.queryUser(username);
 	}

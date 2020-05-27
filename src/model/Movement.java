@@ -3,7 +3,8 @@ package model;
 public interface Movement {
 	/**
 	 * Moves the entity
-	 * @param entity Entity 
+	 * 
+	 * @param entity Entity
 	 */
 	public void move(Entity entity);
 }
