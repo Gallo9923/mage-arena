@@ -12,8 +12,14 @@ To run the application, clone the repository and execute the Main.java file
 To have full access to the app
 
 1. Register a user with the name Admin and any password
-2. Log in with the previous user
-3. 
+2. Log in with the previously created user
+3. Play a match
+  - Move with the W, A, S, D keys +
+  - Click on screen to attack with a spell
+  - Press the ESC key to pause the game
+  - Press the ESC key to unpause the game
+  - Save the match on pause menu
+4. Access the rest of the app
 
 ## Features
 
