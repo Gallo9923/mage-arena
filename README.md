@@ -1,11 +1,13 @@
 # mage-arena
-A JavaFX videogame based on a arena battle with a retro style
+A JavaFX videogame based on an arena battle with a retro-style where a mage fights to survive an endless wave of slimes with its spells
+
+![](docs/images/paused_game_img.JPG)
 
 ## Getting Started
 
 ### Run it
 
-To run the application, clone the repository and execute the Main.java file
+To run the application, clone the repository and execute the src/ui/Main.java file
 
 ### Usage
 
@@ -15,10 +17,10 @@ To have full access to the app
 2. Log in with the previously created user
 3. Play a match
   - Move with the W, A, S, D keys +
-  - Click on screen to attack with a spell
+  - Click on the screen to attack with a spell
   - Press the ESC key to pause the game
   - Press the ESC key to unpause the game
-  - Save the match on pause menu
+  - Save the match on the pause menu
 4. Access the rest of the app
 
 ## Features
@@ -33,7 +35,7 @@ in the same quadtree of a given spell, avoiding the need to take into account th
 An important characteristic of a quadtree is that it has a maximum capacity of elements that it can contain, and 
 when a new entity is going to be inserted when the structure is full, it subdivides into four different quadtrees. 
 In this application, the maximum depth is of 3, in which any quadtree having this depth will have an unrestricted capacity, 
-so it doesn't subdivide any further;
+so it doesn't subdivide any further.
 
 
 ## Directory
