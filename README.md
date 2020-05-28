@@ -26,7 +26,7 @@ To have full access to the app
 ### Explanation Video
 
 In this video you can find the explanation of the whole project. 
-[Video](https://youtu.be/nyuW5ttxnlA)
+[Video](https://youtu.be/VSQHn9E20Kc)
 
 ## Features
 
