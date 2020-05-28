@@ -32,7 +32,15 @@ so it doesn't subdivide any further;
 
 ## Directory
 
+### Requirements
 
+
+
+### Class Diagram
+
+The class diagram of the project can be found in [here](docs/Class Diagram/Class_Diagram.jpg)
+
+### Unit Testing
 
 ## Authors
 
