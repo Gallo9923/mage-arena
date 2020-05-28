@@ -32,7 +32,15 @@ so it doesn't subdivide any further;
 
 ## Directory
 
+### Requirements
 
+
+
+### Class Diagram
+
+The class diagram of the project can be found in [here](https://github.com/Gallo9923/mage-arena/blob/master/docs/Class%20Diagram/Class_Diagram.jpg)
+
+### Unit Testing
 
 ## Authors
 
