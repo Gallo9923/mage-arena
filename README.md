@@ -23,6 +23,11 @@ To have full access to the app
   - Save the match on the pause menu
 4. Access the rest of the app
 
+### Explanation Video
+
+In this video you can find the explanation of the whole project. 
+[Video](https://youtu.be/nyuW5ttxnlA)
+
 ## Features
 
 ### Performance Optimization
